@@ -5,6 +5,9 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
@@ -12,6 +15,7 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
 import java.util.*
 
@@ -30,6 +34,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    // Change Language
     private fun showChangeLanguageDialog() {
         val listItems = arrayOf("English", "Greek")
         val mBuilder = AlertDialog.Builder(this@MainActivity)
@@ -67,12 +72,13 @@ class MainActivity : AppCompatActivity() {
             setLocale(language)
         }
     }
+    // End Change Language
 
     // Popup Menu
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.popup_menu, menu)
-        return super.onCreateOptionsMenu(menu)
+        return true
     }
     // End Popup Menu
 
@@ -133,6 +139,42 @@ class MainActivity : AppCompatActivity() {
         }
     }
     // End Menu Item Click
+
+    // Show Icons with correct color
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        menu?.let {
+            if (menu is MenuBuilder) {
+                try {
+                    val field = menu.javaClass.getDeclaredField("mOptionalIconsVisible")
+                    field.isAccessible = true
+                    field.setBoolean(menu, true)
+                } catch (ignored: Exception) {
+                    // ignored exception
+                    //logger.debug("ignored exception: ${ignored.javaClass.simpleName}")
+                }
+            }
+            for (item in 0 until menu.size()) {
+                val menuItem = menu.getItem(item)
+                menuItem.icon.setIconColor(
+                        if (menuItem.getShowAsAction() == 0) Color.WHITE
+                        else Color.BLACK
+                )
+            }
+        }
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    fun MenuItem.getShowAsAction(): Int {
+        var f = this.javaClass.getDeclaredField("mShowAsAction")
+        f.isAccessible = true
+        return f.getInt(this)
+    }
+
+    fun Drawable.setIconColor(color: Int) {
+        mutate()
+        setColorFilter(color, PorterDuff.Mode.SRC_ATOP)
+    }
+    // End Show Icons with correct color
 
     // Back Pressed
     override fun onBackPressed() {
