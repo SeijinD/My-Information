@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">My Information</string>
+    <string name="share_it">Share It</string>
+    <string name="rate_it">Rate It</string>
+    <string name="privacy_police">Privacy Police</string>
+    <string name="my_information">My Information</string>
+    <string name="change_language">Change Language</string>
+</resources>
