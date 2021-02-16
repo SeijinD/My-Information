@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="isUsersList"
+            type="eu.seijindemon.myinformation.data.User" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius = "10dp"
+        app:cardElevation="10dp"
+        card_view:cardCornerRAdius="5dp"
+        android:layout_margin="5dp">
+
+        <LinearLayout
+            android:background="@color/gray"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="5dp">
+
+            <TextView
+                android:id="@+id/firstName_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:text="FirstName"
+                android:textSize="17sp"/>
+
+            <TextView
+                android:id="@+id/lastName_user"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textColor="@color/white"
+                android:text="LastName"
+                android:textSize="17sp"/>
+
+<!--            <Button-->
+<!--                android:id="@+id/button_user"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginLeft="20dp"-->
+<!--                android:text="OK"-->
+<!--                android:textSize="17sp" />-->
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</layout>

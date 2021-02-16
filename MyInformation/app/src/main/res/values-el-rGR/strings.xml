@@ -6,4 +6,11 @@
     <string name="privacy_police">"Πολιτική απορρήτου "</string>
     <string name="change_language">Αλλαξε γλώσσα</string>
     <string name="my_information">"Οι πληροφορίες μου "</string>
+    <string name="firstNameView">Όνομα:</string>
+    <string name="lastNameView">Επίθετο:</string>
+    <string name="add_user">Πρόσθεσε Χρήστη</string>
+    <string name="users">"Χρήστες "</string>
+    <string name="enter_firstName">"Εισαγάγετε Όνομα "</string>
+    <string name="enter_lastName">Εισαγάγετε Επίθετο</string>
+    <string name="button_save">Αποθηκεύσετε</string>
 </resources>

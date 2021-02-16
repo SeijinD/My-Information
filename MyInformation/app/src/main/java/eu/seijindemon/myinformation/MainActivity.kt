@@ -10,6 +10,8 @@ import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Bundle
+import android.text.TextUtils
+import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -17,9 +19,24 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import eu.seijindemon.myinformation.data.MyInfoViewModel
+import eu.seijindemon.myinformation.data.User
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.add_user_popup.view.*
+import kotlinx.android.synthetic.main.model_link.*
+import kotlinx.android.synthetic.main.model_link.view.*
+import kotlinx.android.synthetic.main.users_popup.*
+import kotlinx.android.synthetic.main.users_popup.view.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
+
+    private lateinit var mMyInfoViewModel: MyInfoViewModel
+
+    private lateinit var myAdapter: UsersCustomAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadLocale()
@@ -30,7 +47,9 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         // End Toolbar
 
-
+        // Room
+        mMyInfoViewModel = ViewModelProvider(this).get(MyInfoViewModel::class.java)
+        // End Room
 
     }
 
@@ -63,6 +82,7 @@ class MainActivity : AppCompatActivity() {
         val editor = getSharedPreferences("Settings", Context.MODE_PRIVATE).edit()
         editor.putString("My_Lang", Lang)
         editor.apply()
+
     }
 
     private fun loadLocale() {
@@ -82,9 +102,74 @@ class MainActivity : AppCompatActivity() {
     }
     // End Popup Menu
 
+    // Check Data
+    private fun inputCheck(firstName: String, lastName: String): Boolean
+    {
+        return !(TextUtils.isEmpty(firstName) || TextUtils.isEmpty(lastName))
+    }
+    // End Check Data
+
+
+
     // Menu Item Click
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.add_user -> {
+                //
+                val mDialogView = LayoutInflater.from(this).inflate(R.layout.add_user_popup, null)
+                val mBuilder = AlertDialog.Builder(this)
+                    .setView(mDialogView)
+                     //.setTitle("Add User")
+                val mAlertDialog = mBuilder.show()
+                mDialogView.button_signin.setOnClickListener {
+                    val firstName = mDialogView.firstName_signin.text.toString()
+                    val lastName = mDialogView.lastName_signin.text.toString()
+                    if(inputCheck(firstName, lastName)){
+                        val user = User(0, firstName, lastName, null, null, null)
+                        mMyInfoViewModel.addUser(user)
+                        Toast.makeText(this, "Successfully added!", Toast.LENGTH_LONG).show()
+                        mAlertDialog.dismiss()
+                    }
+                    else
+                    {
+                        Toast.makeText(this, "Please fill out all fields!", Toast.LENGTH_LONG).show()
+                    }
+                }
+                true
+            }
+            R.id.users -> {
+                //
+                val mDialogView = LayoutInflater.from(this).inflate(R.layout.users_popup, null)
+                val mBuilder = AlertDialog.Builder(this)
+                    .setView(mDialogView)
+                    //.setTitle("Users")
+                val mAlertDialog = mBuilder.show()
+
+                // Set Up RecyclerList and LinearLayoutManager
+                val recyclerView = mDialogView.recycler_view
+                myAdapter = UsersCustomAdapter()
+                recyclerView.adapter = myAdapter
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                // End Set Up RecyclerList and LinearLayoutManager
+                mMyInfoViewModel.getAllUsers().observe(this, androidx.lifecycle.Observer { user ->
+                    myAdapter.setData(user)
+                })
+
+
+//                mDialogView.setOnClickListener{
+//                    val user: User? = mMyInfoViewModel.getUserById(myAdapter.getPotition())
+//                    if (user != null) {
+//                        Toast.makeText(this, user.firstName, Toast.LENGTH_LONG).show()
+//                        mAlertDialog.dismiss()
+//                    }
+//                    else
+//                    {
+//                        Toast.makeText(this, "User Not Found!", Toast.LENGTH_LONG).show()
+//                    }
+//                }
+
+                true
+            }
             R.id.language -> {
                 // Open Change Language
                 showChangeLanguageDialog()
@@ -156,8 +241,8 @@ class MainActivity : AppCompatActivity() {
             for (item in 0 until menu.size()) {
                 val menuItem = menu.getItem(item)
                 menuItem.icon.setIconColor(
-                        if (menuItem.getShowAsAction() == 0) Color.WHITE
-                        else Color.BLACK
+                    if (menuItem.getShowAsAction() == 0) Color.BLACK
+                    else Color.WHITE
                 )
             }
         }
