@@ -20,7 +20,7 @@ interface MyInfoDao {
     @Query("SELECT * FROM user_table ORDER BY id ASC")
     fun getAllUsers(): LiveData<List<User>>
 
-    @Query("SELECT * FROM user_table WHERE id == :id")
+    @Query("SELECT * FROM user_table WHERE id = :id")
     fun getUserById(id: Int): User
 
 }

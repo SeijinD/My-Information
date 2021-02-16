@@ -23,19 +23,19 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.seijindemon.myinformation.data.MyInfoViewModel
 import eu.seijindemon.myinformation.data.User
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.add_user_popup.view.*
-import kotlinx.android.synthetic.main.model_link.*
 import kotlinx.android.synthetic.main.model_link.view.*
-import kotlinx.android.synthetic.main.users_popup.*
 import kotlinx.android.synthetic.main.users_popup.view.*
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener{
 
     private lateinit var mMyInfoViewModel: MyInfoViewModel
 
     private lateinit var myAdapter: UsersCustomAdapter
+
+    private lateinit var usersList: List<User>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +49,9 @@ class MainActivity : AppCompatActivity() {
 
         // Room
         mMyInfoViewModel = ViewModelProvider(this).get(MyInfoViewModel::class.java)
+        mMyInfoViewModel.getAllUsers().observe(this, androidx.lifecycle.Observer { users ->
+            usersList = users
+        })
         // End Room
 
     }
@@ -82,7 +85,6 @@ class MainActivity : AppCompatActivity() {
         val editor = getSharedPreferences("Settings", Context.MODE_PRIVATE).edit()
         editor.putString("My_Lang", Lang)
         editor.apply()
-
     }
 
     private fun loadLocale() {
@@ -109,7 +111,14 @@ class MainActivity : AppCompatActivity() {
     }
     // End Check Data
 
-
+    // Choose User
+    override fun onItemClick(potition: Int)
+    {
+        Toast.makeText(this,"Item $potition", Toast.LENGTH_SHORT).show()
+        val user: User = usersList[potition]
+        Toast.makeText(this,"${user.firstName}", Toast.LENGTH_SHORT).show()
+    }
+    // End Choose User
 
     // Menu Item Click
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -147,26 +156,17 @@ class MainActivity : AppCompatActivity() {
 
                 // Set Up RecyclerList and LinearLayoutManager
                 val recyclerView = mDialogView.recycler_view
-                myAdapter = UsersCustomAdapter()
+                myAdapter = UsersCustomAdapter(this)
                 recyclerView.adapter = myAdapter
                 recyclerView.layoutManager = LinearLayoutManager(this)
                 // End Set Up RecyclerList and LinearLayoutManager
-                mMyInfoViewModel.getAllUsers().observe(this, androidx.lifecycle.Observer { user ->
-                    myAdapter.setData(user)
+                mMyInfoViewModel.getAllUsers().observe(this, androidx.lifecycle.Observer { users ->
+                    myAdapter.setData(users)
                 })
 
 
-//                mDialogView.setOnClickListener{
-//                    val user: User? = mMyInfoViewModel.getUserById(myAdapter.getPotition())
-//                    if (user != null) {
-//                        Toast.makeText(this, user.firstName, Toast.LENGTH_LONG).show()
-//                        mAlertDialog.dismiss()
-//                    }
-//                    else
-//                    {
-//                        Toast.makeText(this, "User Not Found!", Toast.LENGTH_LONG).show()
-//                    }
-//                }
+
+
 
                 true
             }

@@ -42,14 +42,6 @@
                 android:text="LastName"
                 android:textSize="17sp"/>
 
-<!--            <Button-->
-<!--                android:id="@+id/button_user"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginLeft="20dp"-->
-<!--                android:text="OK"-->
-<!--                android:textSize="17sp" />-->
-
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
