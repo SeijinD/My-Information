@@ -14,6 +14,7 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -23,8 +24,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.seijindemon.myinformation.data.MyInfoViewModel
 import eu.seijindemon.myinformation.data.User
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.add_user_popup.*
 import kotlinx.android.synthetic.main.add_user_popup.view.*
+import kotlinx.android.synthetic.main.delete_user_popup.*
+import kotlinx.android.synthetic.main.delete_user_popup.view.*
 import kotlinx.android.synthetic.main.model_link.view.*
 import kotlinx.android.synthetic.main.users_popup.view.*
 import java.util.*
@@ -36,6 +41,8 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
     private lateinit var myAdapter: UsersCustomAdapter
 
     private lateinit var usersList: List<User>
+
+    private lateinit var currentUser: User
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +60,33 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
             usersList = users
         })
         // End Room
+
+
+        update_button.setOnClickListener{
+
+        }
+
+        delete_button.setOnClickListener{
+            val mDialogView = LayoutInflater.from(this).inflate(R.layout.delete_user_popup, null)
+            val mBuilder = AlertDialog.Builder(this)
+                    .setView(mDialogView)
+            val mAlertDialog = mBuilder.show()
+
+            val user: User = currentUser
+            mDialogView.firstName_delete.text = user.firstName
+            mDialogView.lastName_delete.text = user.lastName
+            mDialogView.delete_user_button.setOnClickListener {
+                if(user != null){
+                    mMyInfoViewModel.deleteUser(user)
+                    Toast.makeText(this, "Successfully deleted!", Toast.LENGTH_LONG).show()
+                    mAlertDialog.dismiss()
+                }
+                else
+                {
+                    Toast.makeText(this, "UnSuccessfully delete!", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
 
     }
 
@@ -114,9 +148,15 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
     // Choose User
     override fun onItemClick(potition: Int)
     {
-        Toast.makeText(this,"Item $potition", Toast.LENGTH_SHORT).show()
         val user: User = usersList[potition]
-        Toast.makeText(this,"${user.firstName}", Toast.LENGTH_SHORT).show()
+        currentUser = user // get current user for use it in others fun
+        // Toast.makeText(this, user.firstName, Toast.LENGTH_SHORT).show()
+
+        val firstName = findViewById<TextView>(R.id.firstNameView)
+        val lastName = findViewById<TextView>(R.id.lastNameView)
+
+        firstName.text = user.firstName
+        lastName.text = user.lastName
     }
     // End Choose User
 
@@ -163,10 +203,6 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
                 mMyInfoViewModel.getAllUsers().observe(this, androidx.lifecycle.Observer { users ->
                     myAdapter.setData(users)
                 })
-
-
-
-
 
                 true
             }

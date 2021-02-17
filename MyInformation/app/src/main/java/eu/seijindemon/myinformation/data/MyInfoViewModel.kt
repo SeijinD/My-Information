@@ -27,6 +27,14 @@ class MyInfoViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun deleteUser(user: User)
+    {
+        viewModelScope.launch(Dispatchers.IO)
+        {
+            repository.deleteUser(user)
+        }
+    }
+
     fun getAllUsers(): LiveData<List<User>> {
         return repository.getAllUsers
     }

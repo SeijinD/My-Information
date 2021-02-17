@@ -13,4 +13,8 @@
     <string name="enter_firstName">"Εισαγάγετε Όνομα "</string>
     <string name="enter_lastName">Εισαγάγετε Επίθετο</string>
     <string name="button_save">Αποθηκεύσετε</string>
+    <string name="idNumberView">Αριθμό ταυτότητας:</string>
+    <string name="Update">Ενημέρωση</string>
+    <string name="Delete">Διαγράφη</string>
+    <string name="delete_user_button">Διαγράφη Χρήστη</string>
 </resources>

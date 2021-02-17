@@ -6,9 +6,14 @@ class MyInfoRepository(private val myInfoDao: MyInfoDao) {
 
     val getAllUsers: LiveData<List<User>> = myInfoDao.getAllUsers()
 
-    suspend fun addUser(user: User)
+    fun addUser(user: User)
     {
         myInfoDao.addUser(user)
+    }
+
+    fun deleteUser(user: User)
+    {
+        myInfoDao.deleteUser(user)
     }
 
     fun getUserById(id: Int): User
