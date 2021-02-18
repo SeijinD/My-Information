@@ -80,6 +80,13 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
                     mMyInfoViewModel.deleteUser(user)
                     Toast.makeText(this, "Successfully deleted!", Toast.LENGTH_LONG).show()
                     mAlertDialog.dismiss()
+
+                    //  clear main textviews
+                    val firstName = findViewById<TextView>(R.id.firstNameView)
+                    val lastName = findViewById<TextView>(R.id.lastNameView)
+
+                    firstName.text = "FirstName:"
+                    lastName.text = "LastName"
                 }
                 else
                 {
