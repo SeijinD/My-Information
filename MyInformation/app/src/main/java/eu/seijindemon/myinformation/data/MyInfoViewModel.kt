@@ -27,6 +27,14 @@ class MyInfoViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun updateUser(user: User)
+    {
+        viewModelScope.launch(Dispatchers.IO)
+        {
+            repository.updateUser(user)
+        }
+    }
+
     fun deleteUser(user: User)
     {
         viewModelScope.launch(Dispatchers.IO)

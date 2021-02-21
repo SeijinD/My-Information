@@ -17,4 +17,5 @@
     <string name="Update">Ενημέρωση</string>
     <string name="Delete">Διαγράφη</string>
     <string name="delete_user_button">Διαγράφη Χρήστη</string>
+    <string name="update_user_button">Ενημέρωση</string>
 </resources>

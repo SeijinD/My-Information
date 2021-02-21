@@ -18,4 +18,6 @@
     <string name="Update">Update</string>
     <string name="Delete">Delete</string>
     <string name="delete_user_button">Delete User</string>
+    <string name="update_user_button">Update</string>
+    <!-- TODO: Remove or change this placeholder text -->
 </resources>

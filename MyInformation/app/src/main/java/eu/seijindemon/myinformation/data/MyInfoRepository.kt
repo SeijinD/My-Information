@@ -11,6 +11,11 @@ class MyInfoRepository(private val myInfoDao: MyInfoDao) {
         myInfoDao.addUser(user)
     }
 
+    fun updateUser(user: User)
+    {
+        myInfoDao.updateUser(user)
+    }
+
     fun deleteUser(user: User)
     {
         myInfoDao.deleteUser(user)

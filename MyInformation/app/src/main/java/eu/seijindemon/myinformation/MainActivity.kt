@@ -1,5 +1,6 @@
 package eu.seijindemon.myinformation
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.ActivityNotFoundException
 import android.content.Context
@@ -9,17 +10,23 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.net.Uri
+import android.nfc.Tag
 import android.os.Bundle
+import android.os.Debug
 import android.text.TextUtils
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.seijindemon.myinformation.data.MyInfoViewModel
@@ -31,6 +38,7 @@ import kotlinx.android.synthetic.main.add_user_popup.view.*
 import kotlinx.android.synthetic.main.delete_user_popup.*
 import kotlinx.android.synthetic.main.delete_user_popup.view.*
 import kotlinx.android.synthetic.main.model_link.view.*
+import kotlinx.android.synthetic.main.update_user_popup.view.*
 import kotlinx.android.synthetic.main.users_popup.view.*
 import java.util.*
 
@@ -44,6 +52,7 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
 
     private lateinit var currentUser: User
 
+    @SuppressLint("ResourceType")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadLocale()
@@ -63,7 +72,37 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
 
 
         update_button.setOnClickListener{
+            val mDialogView = LayoutInflater.from(this).inflate(R.layout.update_user_popup, null)
+            val mBuilder = AlertDialog.Builder(this)
+                    .setView(mDialogView)
+            val mAlertDialog = mBuilder.show()
 
+            val user: User = currentUser
+            mDialogView.firstName_update.setText(user.firstName)
+            mDialogView.lastName_update.setText(user.lastName)
+            mDialogView.update_user_button.setOnClickListener {
+                if(user != null)
+                {
+                    val firstName = mDialogView.firstName_update
+                    val lastName = mDialogView.lastName_update
+                    val updateUser = User(user.id, firstName.text.toString(), lastName.text.toString(), null, null, null)
+                    mMyInfoViewModel.updateUser(updateUser)
+                    Toast.makeText(this, "Successfully updated!", Toast.LENGTH_LONG).show()
+
+                    //  change main textviews
+                    val firstName_main = findViewById<TextView>(R.id.firstNameView)
+                    val lastName_main = findViewById<TextView>(R.id.lastNameView)
+
+                    firstName_main.text = updateUser.firstName
+                    lastName_main.text = updateUser.lastName
+
+                    mAlertDialog.dismiss()
+                }
+                else
+                {
+                    Toast.makeText(this, "UnSuccessfully update!", Toast.LENGTH_LONG).show()
+                }
+            }
         }
 
         delete_button.setOnClickListener{
@@ -175,20 +214,19 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
                 val mDialogView = LayoutInflater.from(this).inflate(R.layout.add_user_popup, null)
                 val mBuilder = AlertDialog.Builder(this)
                     .setView(mDialogView)
-                     //.setTitle("Add User")
+                //.setTitle("Add User")
                 val mAlertDialog = mBuilder.show()
                 mDialogView.button_signin.setOnClickListener {
                     val firstName = mDialogView.firstName_signin.text.toString()
                     val lastName = mDialogView.lastName_signin.text.toString()
-                    if(inputCheck(firstName, lastName)){
+                    if (inputCheck(firstName, lastName)) {
                         val user = User(0, firstName, lastName, null, null, null)
                         mMyInfoViewModel.addUser(user)
                         Toast.makeText(this, "Successfully added!", Toast.LENGTH_LONG).show()
                         mAlertDialog.dismiss()
-                    }
-                    else
-                    {
-                        Toast.makeText(this, "Please fill out all fields!", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this, "Please fill out all fields!", Toast.LENGTH_LONG)
+                            .show()
                     }
                 }
                 true
@@ -198,7 +236,7 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
                 val mDialogView = LayoutInflater.from(this).inflate(R.layout.users_popup, null)
                 val mBuilder = AlertDialog.Builder(this)
                     .setView(mDialogView)
-                    //.setTitle("Users")
+                //.setTitle("Users")
                 val mAlertDialog = mBuilder.show()
 
                 // Set Up RecyclerList and LinearLayoutManager
