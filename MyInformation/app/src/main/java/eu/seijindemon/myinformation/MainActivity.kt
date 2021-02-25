@@ -68,6 +68,9 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
             //  change main textviews
             val firstName_main = findViewById<TextView>(R.id.firstNameView)
             val lastName_main = findViewById<TextView>(R.id.lastNameView)
+            val idNumber_main = findViewById<TextView>(R.id.idNumberView)
+            val afm_main = findViewById<TextView>(R.id.afmView)
+            val amka_main = findViewById<TextView>(R.id.amkaView)
 
             // Hide Buttons And Show First Data
             if (usersList.isEmpty())
@@ -75,14 +78,21 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
                 update_button.visibility = View.GONE
                 delete_button.visibility = View.GONE
 
-                firstName_main.text = "FirstName:"
-                lastName_main.text = "LastName:"
+                firstName_main.text = "FirstName"
+                lastName_main.text = "LastName"
+                idNumber_main.text = "IdNumber"
+                afm_main.text = "AFM"
+                amka_main.text = "AMKA"
+
             }
             else
             {
                 currentUser = usersList.first()
                 firstName_main.text = currentUser.firstName
                 lastName_main.text = currentUser.lastName
+                idNumber_main.text = currentUser.idNumber
+                afm_main.text = currentUser.afm
+                amka_main.text = currentUser.amka
             }
             // End Hide Buttons And Show First Data
         })
@@ -96,21 +106,33 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
             val user: User = currentUser
             mDialogView.firstName_update.setText(user.firstName)
             mDialogView.lastName_update.setText(user.lastName)
+            mDialogView.idNumber_update.setText(user.idNumber)
+            mDialogView.afm_update.setText(user.afm)
+            mDialogView.amka_update.setText(user.amka)
             mDialogView.update_user_button.setOnClickListener {
                 val firstName = mDialogView.firstName_update
                 val lastName = mDialogView.lastName_update
-                val updateUser = User(user.id, firstName.text.toString(), lastName.text.toString(), null, null, null)
+                val idNumber = mDialogView.idNumber_update
+                val afm = mDialogView.afm_update
+                val amka = mDialogView.amka_update
+                val updateUser = User(user.id, firstName.text.toString(), lastName.text.toString(), idNumber.text.toString(), afm.text.toString(), amka.text.toString())
                 mMyInfoViewModel.updateUser(updateUser)
-                Toast.makeText(this, "Successfully updated!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, R.string.success_updated, Toast.LENGTH_LONG).show()
 
                 currentUser = updateUser
 
                 //  change main textviews
                 val firstName_main = findViewById<TextView>(R.id.firstNameView)
                 val lastName_main = findViewById<TextView>(R.id.lastNameView)
+                val idNumber_main = findViewById<TextView>(R.id.idNumberView)
+                val afm_main = findViewById<TextView>(R.id.afmView)
+                val amka_main = findViewById<TextView>(R.id.amkaView)
 
                 firstName_main.text = updateUser.firstName
                 lastName_main.text = updateUser.lastName
+                idNumber_main.text = updateUser.idNumber
+                afm_main.text = updateUser.afm
+                amka_main.text = updateUser.amka
 
                 mAlertDialog.dismiss()
             }
@@ -127,12 +149,15 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
             mDialogView.lastName_delete.text = user.lastName
             mDialogView.delete_user_button.setOnClickListener {
                 mMyInfoViewModel.deleteUser(user)
-                Toast.makeText(this, "Successfully deleted!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, R.string.success_deleted, Toast.LENGTH_LONG).show()
                 mAlertDialog.dismiss()
 
                 //  clear main textviews
                 val firstName = findViewById<TextView>(R.id.firstNameView)
                 val lastName = findViewById<TextView>(R.id.lastNameView)
+                val idNumber = findViewById<TextView>(R.id.idNumberView)
+                val afm = findViewById<TextView>(R.id.afmView)
+                val amka = findViewById<TextView>(R.id.amkaView)
 
                 mMyInfoViewModel.getAllUsers().observe(this, androidx.lifecycle.Observer { users ->
                     usersList = users
@@ -142,8 +167,11 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
                         update_button.visibility = View.GONE
                         delete_button.visibility = View.GONE
 
-                        firstName.text = "FirstName:"
-                        lastName.text = "LastName:"
+                        firstName.text = "FirstName"
+                        lastName.text = "LastName"
+                        idNumber.text = "IdNumber"
+                        afm.text = "AFM"
+                        amka.text = "AMKA"
                     }
                     else
                     {
@@ -151,6 +179,9 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
 
                         firstName.text = currentUser.firstName
                         lastName.text = currentUser.lastName
+                        idNumber.text = currentUser.idNumber
+                        afm.text = currentUser.afm
+                        amka.text = currentUser.amka
                     }
                 })
             }
@@ -222,9 +253,15 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
 
         val firstName = findViewById<TextView>(R.id.firstNameView)
         val lastName = findViewById<TextView>(R.id.lastNameView)
+        val idNumber = findViewById<TextView>(R.id.idNumberView)
+        val afm = findViewById<TextView>(R.id.afmView)
+        val amka = findViewById<TextView>(R.id.amkaView)
 
         firstName.text = user.firstName
         lastName.text = user.lastName
+        idNumber.text = user.idNumber
+        afm.text = user.afm
+        amka.text = user.amka
 
         // Show Buttons
         update_button.visibility = View.VISIBLE
@@ -249,13 +286,13 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
                     if (inputCheck(firstName, lastName)) {
                         val user = User(0, firstName, lastName, null, null, null)
                         mMyInfoViewModel.addUser(user)
-                        Toast.makeText(this, "Successfully added!", Toast.LENGTH_LONG).show()
+                        Toast.makeText(this, R.string.success_added, Toast.LENGTH_LONG).show()
                         mAlertDialog.dismiss()
 
                         update_button.visibility = View.VISIBLE
                         delete_button.visibility = View.VISIBLE
                     } else {
-                        Toast.makeText(this, "Please fill out all fields!", Toast.LENGTH_LONG)
+                        Toast.makeText(this, R.string.please_fill_all_fields, Toast.LENGTH_LONG)
                             .show()
                     }
                 }
@@ -317,7 +354,7 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
                 }
                 true
             }
-            R.id.privacy_police -> {
+            R.id.privacy_policy -> {
                 // Open Privacy Police URL
                 try {
                     startActivity(
@@ -327,7 +364,7 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
                         )
                     )
                 } catch (e: ActivityNotFoundException) {
-                    Toast.makeText(this, "Privacy Police Not Found!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "Privacy Policy Not Found!", Toast.LENGTH_SHORT).show()
                 }
                 true
             }

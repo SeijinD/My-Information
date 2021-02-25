@@ -57,6 +57,48 @@
                 android:textStyle="bold"
                 android:textColor="@color/purple_500"/>
 
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/Widget.MaterialComponents.TextView"
+                android:id="@+id/idNumberView"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:padding="15dp"
+                android:text="IdNumber:"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="@color/purple_500"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/Widget.MaterialComponents.TextView"
+                android:id="@+id/afmView"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:padding="15dp"
+                android:text="AFM:"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="@color/purple_500"/>
+
+            <com.google.android.material.textview.MaterialTextView
+                style="@style/Widget.MaterialComponents.TextView"
+                android:id="@+id/amkaView"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="20dp"
+                android:padding="15dp"
+                android:text="AMKA:"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="@color/purple_500"/>
+
         </LinearLayout>
 
         <RelativeLayout

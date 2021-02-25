@@ -33,9 +33,9 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/privacy_police"
+        android:id="@+id/privacy_policy"
         android:icon="@drawable/ic_baseline_privacy_tip_24"
-        android:title="@string/privacy_police"
+        android:title="@string/privacy_policy"
         app:showAsAction="never" />
 
 </menu>

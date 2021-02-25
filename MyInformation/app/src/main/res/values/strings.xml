@@ -3,7 +3,7 @@
     <string name="app_name">My Information</string>
     <string name="share_it">Share It</string>
     <string name="rate_it">Rate It</string>
-    <string name="privacy_police">Privacy Police</string>
+    <string name="privacy_policy">Privacy Policy</string>
     <string name="my_information">My Information</string>
     <string name="change_language">Change Language</string>
     <string name="firstNameView">First Name:</string>
@@ -19,5 +19,11 @@
     <string name="Delete">Delete</string>
     <string name="delete_user_button">Delete User</string>
     <string name="update_user_button">Update</string>
+    <string name="success_updated">Successfully updated!</string>
+    <string name="success_deleted">Successfully deleted!</string>
+    <string name="success_added">Successfully added!</string>
+    <string name="please_fill_all_fields">Please fill out all fields!</string>
+    <string name="afmView">AFM</string>
+    <string name="amkaView">AMKA</string>
     <!-- TODO: Remove or change this placeholder text -->
 </resources>
