@@ -10,23 +10,18 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.net.Uri
-import android.nfc.Tag
 import android.os.Bundle
-import android.os.Debug
 import android.text.TextUtils
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.EditText
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.FragmentManager
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import eu.seijindemon.myinformation.data.MyInfoViewModel
@@ -48,11 +43,11 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
 
     private lateinit var myAdapter: UsersCustomAdapter
 
-    private lateinit var usersList: List<User>
+    private var usersList: List<User> = emptyList()
 
     private lateinit var currentUser: User
 
-    @SuppressLint("ResourceType")
+    @SuppressLint("ResourceType", "CutPasteId", "SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loadLocale()
@@ -65,11 +60,32 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
 
         // Room
         mMyInfoViewModel = ViewModelProvider(this).get(MyInfoViewModel::class.java)
-        mMyInfoViewModel.getAllUsers().observe(this, androidx.lifecycle.Observer { users ->
-            usersList = users
-        })
         // End Room
 
+        mMyInfoViewModel.getAllUsers().observe(this, androidx.lifecycle.Observer { users ->
+            usersList = users
+
+            //  change main textviews
+            val firstName_main = findViewById<TextView>(R.id.firstNameView)
+            val lastName_main = findViewById<TextView>(R.id.lastNameView)
+
+            // Hide Buttons And Show First Data
+            if (usersList.isEmpty())
+            {
+                update_button.visibility = View.GONE
+                delete_button.visibility = View.GONE
+
+                firstName_main.text = "FirstName:"
+                lastName_main.text = "LastName:"
+            }
+            else
+            {
+                currentUser = usersList.first()
+                firstName_main.text = currentUser.firstName
+                lastName_main.text = currentUser.lastName
+            }
+            // End Hide Buttons And Show First Data
+        })
 
         update_button.setOnClickListener{
             val mDialogView = LayoutInflater.from(this).inflate(R.layout.update_user_popup, null)
@@ -81,27 +97,22 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
             mDialogView.firstName_update.setText(user.firstName)
             mDialogView.lastName_update.setText(user.lastName)
             mDialogView.update_user_button.setOnClickListener {
-                if(user != null)
-                {
-                    val firstName = mDialogView.firstName_update
-                    val lastName = mDialogView.lastName_update
-                    val updateUser = User(user.id, firstName.text.toString(), lastName.text.toString(), null, null, null)
-                    mMyInfoViewModel.updateUser(updateUser)
-                    Toast.makeText(this, "Successfully updated!", Toast.LENGTH_LONG).show()
+                val firstName = mDialogView.firstName_update
+                val lastName = mDialogView.lastName_update
+                val updateUser = User(user.id, firstName.text.toString(), lastName.text.toString(), null, null, null)
+                mMyInfoViewModel.updateUser(updateUser)
+                Toast.makeText(this, "Successfully updated!", Toast.LENGTH_LONG).show()
 
-                    //  change main textviews
-                    val firstName_main = findViewById<TextView>(R.id.firstNameView)
-                    val lastName_main = findViewById<TextView>(R.id.lastNameView)
+                currentUser = updateUser
 
-                    firstName_main.text = updateUser.firstName
-                    lastName_main.text = updateUser.lastName
+                //  change main textviews
+                val firstName_main = findViewById<TextView>(R.id.firstNameView)
+                val lastName_main = findViewById<TextView>(R.id.lastNameView)
 
-                    mAlertDialog.dismiss()
-                }
-                else
-                {
-                    Toast.makeText(this, "UnSuccessfully update!", Toast.LENGTH_LONG).show()
-                }
+                firstName_main.text = updateUser.firstName
+                lastName_main.text = updateUser.lastName
+
+                mAlertDialog.dismiss()
             }
         }
 
@@ -115,22 +126,33 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
             mDialogView.firstName_delete.text = user.firstName
             mDialogView.lastName_delete.text = user.lastName
             mDialogView.delete_user_button.setOnClickListener {
-                if(user != null){
-                    mMyInfoViewModel.deleteUser(user)
-                    Toast.makeText(this, "Successfully deleted!", Toast.LENGTH_LONG).show()
-                    mAlertDialog.dismiss()
+                mMyInfoViewModel.deleteUser(user)
+                Toast.makeText(this, "Successfully deleted!", Toast.LENGTH_LONG).show()
+                mAlertDialog.dismiss()
 
-                    //  clear main textviews
-                    val firstName = findViewById<TextView>(R.id.firstNameView)
-                    val lastName = findViewById<TextView>(R.id.lastNameView)
+                //  clear main textviews
+                val firstName = findViewById<TextView>(R.id.firstNameView)
+                val lastName = findViewById<TextView>(R.id.lastNameView)
 
-                    firstName.text = "FirstName:"
-                    lastName.text = "LastName"
-                }
-                else
-                {
-                    Toast.makeText(this, "UnSuccessfully delete!", Toast.LENGTH_LONG).show()
-                }
+                mMyInfoViewModel.getAllUsers().observe(this, androidx.lifecycle.Observer { users ->
+                    usersList = users
+
+                    if (usersList.isEmpty())
+                    {
+                        update_button.visibility = View.GONE
+                        delete_button.visibility = View.GONE
+
+                        firstName.text = "FirstName:"
+                        lastName.text = "LastName:"
+                    }
+                    else
+                    {
+                        currentUser = usersList.first()
+
+                        firstName.text = currentUser.firstName
+                        lastName.text = currentUser.lastName
+                    }
+                })
             }
         }
 
@@ -203,6 +225,11 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
 
         firstName.text = user.firstName
         lastName.text = user.lastName
+
+        // Show Buttons
+        update_button.visibility = View.VISIBLE
+        delete_button.visibility = View.VISIBLE
+        // End Show Buttons
     }
     // End Choose User
 
@@ -224,6 +251,9 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
                         mMyInfoViewModel.addUser(user)
                         Toast.makeText(this, "Successfully added!", Toast.LENGTH_LONG).show()
                         mAlertDialog.dismiss()
+
+                        update_button.visibility = View.VISIBLE
+                        delete_button.visibility = View.VISIBLE
                     } else {
                         Toast.makeText(this, "Please fill out all fields!", Toast.LENGTH_LONG)
                             .show()
@@ -331,7 +361,7 @@ class MainActivity : AppCompatActivity(), UsersCustomAdapter.OnItemClickListener
     }
 
     fun MenuItem.getShowAsAction(): Int {
-        var f = this.javaClass.getDeclaredField("mShowAsAction")
+        val f = this.javaClass.getDeclaredField("mShowAsAction")
         f.isAccessible = true
         return f.getInt(this)
     }

@@ -6,22 +6,50 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <EditText
-        android:id="@+id/firstName_signin"
-        android:layout_width="match_parent"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_height="wrap_content"
-        android:hint="@string/enter_firstName"/>
-
-    <EditText
-        android:id="@+id/lastName_signin"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/enter_lastName"/>
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:hint="@string/enter_firstName"
+        android:layout_marginTop="10dp">
 
-    <Button
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/firstName_signin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:textStyle="bold"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:hint="@string/enter_lastName"
+        android:layout_marginTop="10dp">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/lastName_signin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:textStyle="bold"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_signin"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/button_save"/>
+        android:layout_width="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/button_save"
+        android:layout_marginTop="10dp"/>
 
 </LinearLayout>

@@ -7,54 +7,51 @@
     tools:context=".MainActivity"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/firstNameUpdateView"
-        android:layout_width="match_parent"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:textColor="@color/purple_500"
-        android:text="@string/firstNameView"
-        />
-
-    <EditText
-        android:id="@+id/firstName_update"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:textColor="@color/purple_500"/>
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:hint="@string/firstNameView"
+        android:layout_marginTop="10dp">
 
-    <TextView
-        android:id="@+id/lastNameUpdateView"
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/firstName_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:textStyle="bold"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:textColor="@color/purple_500"
-        android:text="@string/lastNameView"
-        />
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:hint="@string/lastNameView"
+        android:layout_marginTop="10dp">
 
-    <EditText
-        android:id="@+id/lastName_update"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-        android:textColor="@color/purple_500"/>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/lastName_update"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="20dp"
+            android:textStyle="bold"/>
 
-    <Button
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/update_user_button"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/update_user_button"/>
+        android:layout_width="match_parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/update_user_button"
+        android:layout_marginTop="10dp"/>
+
 
 </LinearLayout>
