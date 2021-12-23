@@ -17,8 +17,8 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -39,14 +39,42 @@ fun HomeScreen(
     viewModel: AppViewModel
 ) {
 
+    viewModel.getAllUsers()
     val users by viewModel.users.observeAsState()
 
     val context = LocalContext.current
     val packageName = context.packageName
-    val openPrivacyPolicy = remember { Intent(Intent.ACTION_VIEW, Uri.parse("https://my-informations.flycricket.io/privacy.html")) }
-    val openRate1 = remember { Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$packageName")) }
-    val openRate2 = remember { Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=$packageName")) }
-    val openShare = remember { Intent(Intent.ACTION_SEND) }
+
+    // Privacy Policy
+    val openPrivacyPolicy = remember {
+        Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("https://my-informations.flycricket.io/privacy.html"))
+    }
+    // Rate
+    val openRate1 = remember {
+        Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("market://details?id=$packageName"))
+    }
+    val openRate2 = remember {
+        Intent(
+            Intent.ACTION_VIEW,
+            Uri.parse("http://play.google.com/store/apps/details?id=$packageName"))
+    }
+    // Share
+    val sendIntent: Intent = Intent().apply {
+        action = Intent.ACTION_SEND
+        putExtra(Intent.EXTRA_SUBJECT, "My Information")
+        putExtra(Intent.EXTRA_TEXT, "Download this App now: http://play.google.com/store/apps/details?id=${context.packageName}")
+        type = "text/plain"
+    }
+    val shareIntent = Intent.createChooser(sendIntent, null)
+    val openShare = remember { shareIntent }
+    // Change Language
+    val openChangeLanguageDialog = remember { mutableStateOf(false) }
+    // Add User
+    val openAddUserDialog = remember { mutableStateOf(false) }
 
     MyInformationTheme {
         Scaffold(
@@ -63,7 +91,7 @@ fun HomeScreen(
                             modifier = Modifier
                                 .padding(all = 5.dp)
                                 .clickable(onClick = {
-
+                                    openChangeLanguageDialog.value = true
                                 })
                         )
                         Icon(
@@ -73,7 +101,11 @@ fun HomeScreen(
                             modifier = Modifier
                                 .padding(all = 5.dp)
                                 .clickable(onClick = {
-
+                                    try {
+                                        context.startActivity(openShare)
+                                    } catch (e: ActivityNotFoundException) {
+                                        // TODO Error Share
+                                    }
                                 })
                         )
                         Icon(
@@ -100,7 +132,7 @@ fun HomeScreen(
                                     try {
                                         context.startActivity(openPrivacyPolicy)
                                     } catch (e: ActivityNotFoundException) {
-                                        // TODO
+                                        // TODO Error Privacy Policy
                                     }
 
                                 })
@@ -122,7 +154,7 @@ fun HomeScreen(
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-
+                        openAddUserDialog.value = true
                     }
                 ) {
                     Icon(
@@ -141,6 +173,17 @@ fun HomeScreen(
                     viewModel = viewModel
                 )
             }
+            if (openChangeLanguageDialog.value) {
+                ChangeLanguageDialog(
+                    openChangeLanguageDialog = openChangeLanguageDialog
+                )
+            }
+            if (openAddUserDialog.value) {
+                AddUserDialog(
+                    openAddUserDialog = openAddUserDialog,
+                    viewModel = viewModel
+                )
+            }
         }
     }
 }
@@ -155,8 +198,8 @@ fun HomeContent(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.DarkGray),
-//            .verticalScroll(scrollState),
+            .background(color = Color.DarkGray)
+            .verticalScroll(scrollState),
         contentPadding = PaddingValues(
             all = 5.dp
         )

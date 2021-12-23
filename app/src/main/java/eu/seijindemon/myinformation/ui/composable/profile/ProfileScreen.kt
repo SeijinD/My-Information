@@ -11,6 +11,8 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -25,6 +27,10 @@ import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
 
 @Composable
 fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
+
+    // Add User
+    val openAddFieldDialog = remember { mutableStateOf(false) }
+
     MyInformationTheme {
         Scaffold(
             topBar = {
@@ -94,7 +100,7 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
             floatingActionButton = {
                 FloatingActionButton(
                     onClick = {
-
+                        openAddFieldDialog.value = true
                     }
                 ) {
                     Icon(
@@ -109,6 +115,9 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
             ProfileContent(
                 viewModel = viewModel
             )
+            if (openAddFieldDialog.value) {
+                AddFieldDialog(openAddFieldDialog = openAddFieldDialog, viewModel = viewModel)
+            }
         }
     }
 }
@@ -120,6 +129,10 @@ fun ProfileContent(
     val user by  viewModel.user.observeAsState()
     Text(
         text = user!!.firstName,
+        modifier = Modifier.padding(16.dp)
+    )
+    Text(
+        text = user!!.lastName,
         modifier = Modifier.padding(16.dp)
     )
 }
