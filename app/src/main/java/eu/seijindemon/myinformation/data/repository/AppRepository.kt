@@ -2,6 +2,7 @@ package eu.seijindemon.myinformation.data.repository
 
 import androidx.lifecycle.LiveData
 import eu.seijindemon.myinformation.data.local.db.AppDb
+import eu.seijindemon.myinformation.data.model.KeyValue
 import eu.seijindemon.myinformation.data.model.User
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -22,6 +23,10 @@ class AppRepository @Inject constructor(
         appDb.appDao().deleteUser(user)
     }
 
+    fun updateUserKeysValues(keysValues: List<KeyValue>, id: Int) {
+        appDb.appDao().updateUserKeysValues(keysValues, id)
+    }
+
     fun getAllUsers(): LiveData<List<User>> {
         return appDb.appDao().getAllUsers()
     }
@@ -29,5 +34,4 @@ class AppRepository @Inject constructor(
     fun getUserById(id: Int): User? {
         return appDb.appDao().getUserById(id)
     }
-
 }

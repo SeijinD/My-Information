@@ -2,6 +2,7 @@ package eu.seijindemon.myinformation.data.local.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import eu.seijindemon.myinformation.data.model.KeyValue
 import eu.seijindemon.myinformation.data.model.User
 
 @Dao
@@ -15,6 +16,9 @@ interface AppDao {
 
     @Delete
     suspend fun deleteUser(user: User)
+
+    @Query("UPDATE users_table SET keys_values = :keysValues WHERE id = :id")
+    fun updateUserKeysValues(keysValues: List<KeyValue>, id: Int)
 
     @Query("SELECT * FROM users_table ORDER BY id ASC")
     fun getAllUsers(): LiveData<List<User>>

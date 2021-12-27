@@ -1,6 +1,6 @@
 package eu.seijindemon.myinformation.ui.composable.home
 
-import android.content.Context
+import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -10,6 +10,7 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -27,16 +28,17 @@ fun ChangeLanguageDialog(
 ) {
     AlertDialog(
         backgroundColor = Color.White,
-        shape = RoundedCornerShape(12.dp),
+        shape = RoundedCornerShape(10.dp),
         contentColor = Color.Black,
         onDismissRequest = {
             openChangeLanguageDialog.value = false
         },
         buttons = {
             Row(
-                horizontalArrangement = Arrangement.Center,
                 modifier = Modifier
-                    .fillMaxWidth()
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Button(
                     modifier = Modifier
@@ -76,8 +78,9 @@ fun ChangeLanguageDialog(
 }
 
 @Preview(
+    showSystemUi = true,
     showBackground = true,
-    backgroundColor = 0x989a82
+    uiMode = UI_MODE_TYPE_NORMAL
 )
 @Composable
 fun ChangeLanguageDialogPreview() {

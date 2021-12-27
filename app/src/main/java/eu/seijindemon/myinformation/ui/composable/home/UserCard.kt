@@ -1,5 +1,6 @@
 package eu.seijindemon.myinformation.ui.composable.home
 
+import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
@@ -76,15 +77,16 @@ fun UserCard(
 }
 
 @Preview(
+    showSystemUi = true,
     showBackground = true,
-    backgroundColor = 0x989a82
+    uiMode = UI_MODE_TYPE_NORMAL
 )
 @Composable
 fun UserCardPreview() {
     val navController = rememberNavController()
     val viewModel: AppViewModel = viewModel()
     MyInformationTheme {
-        val user = User(1, "George", "Karanikolas")
+        val user = User(1, "George", "Karanikolas", null)
         UserCard(
             user = user,
             navController = navController,

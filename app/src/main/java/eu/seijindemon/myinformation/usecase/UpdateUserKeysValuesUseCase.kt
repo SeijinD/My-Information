@@ -1,15 +1,16 @@
 package eu.seijindemon.myinformation.usecase
 
-import androidx.lifecycle.LiveData
+import eu.seijindemon.myinformation.data.model.KeyValue
 import eu.seijindemon.myinformation.data.model.User
 import eu.seijindemon.myinformation.data.repository.AppRepository
 import javax.inject.Inject
 
-class GetAllUsersUseCase @Inject constructor(
+class UpdateUserKeysValuesUseCase @Inject constructor(
     private val appRepository: AppRepository
 ) {
 
-    operator fun invoke() : LiveData<List<User>> {
-        return appRepository.getAllUsers()
+    operator fun invoke(keysValues: List<KeyValue>, id: Int) {
+        return appRepository.updateUserKeysValues(keysValues, id)
     }
+
 }

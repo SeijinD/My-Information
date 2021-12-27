@@ -2,6 +2,8 @@ package eu.seijindemon.myinformation.ui.composable.home
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.res.Configuration
+import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -39,7 +41,6 @@ fun HomeScreen(
     viewModel: AppViewModel
 ) {
 
-    viewModel.getAllUsers()
     val users by viewModel.users.observeAsState()
 
     val context = LocalContext.current
@@ -194,12 +195,10 @@ fun HomeContent(
     users: List<User>,
     viewModel: AppViewModel
 ) {
-    val scrollState = rememberScrollState()
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(color = Color.DarkGray)
-            .verticalScroll(scrollState),
+            .background(color = Color.DarkGray),
         contentPadding = PaddingValues(
             all = 5.dp
         )
@@ -215,21 +214,22 @@ fun HomeContent(
 }
 
 @Preview(
+    showSystemUi = true,
     showBackground = true,
-    backgroundColor = 0x989a82
+    uiMode = UI_MODE_TYPE_NORMAL
 )
 @Composable
 fun HomeScreenPreview() {
     val navController = rememberNavController()
     val viewModel: AppViewModel = viewModel()
     val users = listOf(
-        User(1, "George", "Karanikolas"),
-        User(2, "Maria", "Lagou"),
-        User(3, "George", "Karanikolas"),
-        User(4, "Maria", "Lagou"),
-        User(5, "George", "Karanikolas"),
-        User(6, "Maria", "Lagou"),
-        User(7, "George", "Karanikolas")
+        User(1, "George", "Karanikolas", null),
+        User(2, "Maria", "Lagou", null),
+        User(3, "George", "Karanikolas", null),
+        User(4, "Maria", "Lagou", null),
+        User(5, "George", "Karanikolas", null),
+        User(6, "Maria", "Lagou", null),
+        User(7, "George", "Karanikolas", null)
     )
     MyInformationTheme {
         HomeContent(
