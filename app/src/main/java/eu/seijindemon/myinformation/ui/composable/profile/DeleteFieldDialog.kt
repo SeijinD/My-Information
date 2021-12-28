@@ -1,4 +1,4 @@
-package eu.seijindemon.myinformation.ui.composable.home
+package eu.seijindemon.myinformation.ui.composable.profile
 
 import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import androidx.compose.foundation.background
@@ -23,22 +23,29 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import eu.seijindemon.myinformation.R
+import eu.seijindemon.myinformation.data.model.KeyValue
 import eu.seijindemon.myinformation.data.model.User
 import eu.seijindemon.myinformation.ui.composable.general.AutoSizeText
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
 
 @Composable
-fun AddUserDialog(
-    openAddUserDialog: MutableState<Boolean>,
-    viewModel: AppViewModel
+fun DeleteFieldDialog(
+    navController: NavController,
+    openDeleteFieldDialog: MutableState<Boolean>,
+    viewModel: AppViewModel,
+    user: User
 ) {
     Dialog(
         onDismissRequest = {
-            openAddUserDialog.value = false
+            openDeleteFieldDialog.value = false
         }
     ) {
+        var key by remember { mutableStateOf("") }
+
         Column(
             modifier = Modifier
                 .padding(all = 5.dp)
@@ -49,55 +56,39 @@ fun AddUserDialog(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AutoSizeText(
-                text = stringResource(id = R.string.add_user),
+                text = stringResource(id = R.string.delete_field),
                 maxFontSize = 18.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1
             )
             Divider()
-            AddUser(
-                viewModel = viewModel,
-                openAddUserDialog = openAddUserDialog
+            OutlinedTextField(
+                value = key,
+                onValueChange = { key = it }
             )
-        }
-    }
-}
-
-@Composable
-fun AddUser(
-    viewModel: AppViewModel,
-    openAddUserDialog: MutableState<Boolean>
-) {
-    var firstName by remember { mutableStateOf("") }
-    var lastName by remember { mutableStateOf("") }
-
-    Column(
-        modifier = Modifier
-            .padding(all = 5.dp)
-            .fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        OutlinedTextField(
-            value = firstName,
-            onValueChange = { firstName = it }
-        )
-        OutlinedTextField(
-            value = lastName,
-            onValueChange = { lastName = it }
-        )
-        Button(
-            onClick = {
-                val user = User(firstName = firstName, lastName = lastName, keysValues = listOf())
-                viewModel.addUser(user)
-                openAddUserDialog.value = false
-
+            Divider()
+            Button(
+                onClick = {
+                    val list = mutableListOf<KeyValue>()
+                    if (!user.keysValues.isNullOrEmpty()) {
+                        list.addAll(user.keysValues!!)
+                    }
+                    for (item: KeyValue in list) {
+                        if (item.key == key) {
+                            list.remove(item)
+                            viewModel.updateUserKeysValues(list, user.id)
+                            openDeleteFieldDialog.value = false
+                            viewModel.getUserById(user.id)
+                            navController.navigate("profile")
+                        }
+                    }
+                }
+            ) {
+                Text(
+                    text = stringResource(id = R.string.delete_field)
+                )
             }
-        ) {
-            Text(
-                text = stringResource(id = R.string.add_user)
-            )
         }
     }
 }
@@ -108,11 +99,21 @@ fun AddUser(
     uiMode = UI_MODE_TYPE_NORMAL
 )
 @Composable
-fun AddUserDialogPreview() {
+fun DeleteFieldDialogPreview() {
+    val navController = rememberNavController()
     val viewModel: AppViewModel = viewModel()
-    val openAddUserDialogPreview = remember { mutableStateOf(true) }
+    val openDeleteFieldDialogPreview = remember { mutableStateOf(true) }
     MyInformationTheme {
-        val user = User(1, "George", "Karanikolas", null)
-        AddUserDialog(viewModel = viewModel, openAddUserDialog = openAddUserDialogPreview)
+        val user = User(1, "George", "Karanikolas", listOf(
+            KeyValue("AMKA","1234567890"),
+            KeyValue("AMKA","1234567890"),
+            KeyValue("AMKA","1234567890")
+        ))
+        DeleteFieldDialog(
+            navController = navController,
+            viewModel = viewModel,
+            openDeleteFieldDialog = openDeleteFieldDialogPreview,
+            user = user
+        )
     }
 }

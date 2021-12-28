@@ -38,54 +38,18 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
     // Update User
     val openUpdateUserDialog = remember { mutableStateOf(false) }
 
+    // Delete Field
+    val openDeleteFieldDialog = remember { mutableStateOf(false) }
+
+    // Update Field
+    val openUpdateFieldDialog = remember { mutableStateOf(false) }
+
     MyInformationTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
                     title = {
                         Text(text = stringResource(id = R.string.app_name))
-                    },
-                    actions = {
-                        Icon(
-                            Icons.Filled.Language,
-                            contentDescription = stringResource(id = R.string.change_language),
-                            tint = Color.White,
-                            modifier = Modifier
-                                .padding(all = 5.dp)
-                                .clickable(onClick = {
-
-                                })
-                        )
-                        Icon(
-                            Icons.Filled.Share,
-                            contentDescription = stringResource(id = R.string.share),
-                            tint = Color.White,
-                            modifier = Modifier
-                                .padding(all = 5.dp)
-                                .clickable(onClick = {
-
-                                })
-                        )
-                        Icon(
-                            Icons.Filled.Star,
-                            contentDescription = stringResource(id = R.string.rate),
-                            tint = Color.White,
-                            modifier = Modifier
-                                .padding(all = 5.dp)
-                                .clickable(onClick = {
-
-                                })
-                        )
-                        Icon(
-                            Icons.Filled.PrivacyTip,
-                            contentDescription = stringResource(id = R.string.privacy_policy),
-                            tint = Color.White,
-                            modifier = Modifier
-                                .padding(all = 5.dp)
-                                .clickable(onClick = {
-
-                                })
-                        )
                     },
                     navigationIcon = {
                         IconButton(onClick = { navController.navigate("home") }) {
@@ -121,7 +85,7 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
 
                     IconButton(
                         onClick = {
-                            // TODO Update Field
+                            openUpdateFieldDialog.value = true
                         }
                     ) {
                         Icon(Icons.Filled.ChangeCircle, "")
@@ -129,7 +93,7 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                     IconButton(
                         modifier = Modifier.padding(end = 10.dp),
                         onClick = {
-                            // TODO Remove Field
+                            openDeleteFieldDialog.value = true
                         }
                     ) {
                         Icon(Icons.Filled.RemoveCircle, "")
@@ -179,6 +143,22 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                     viewModel = viewModel,
                     user = user!!
                 )
+            }
+            if (openDeleteFieldDialog.value && user != null) {
+                DeleteFieldDialog(
+                    navController = navController,
+                    openDeleteFieldDialog = openDeleteFieldDialog,
+                    viewModel = viewModel,
+                    user = user!!
+                )
+            }
+            if (openUpdateFieldDialog.value && user != null) {
+//                UpdateFieldDialog(
+//                    navController = navController,
+//                    openUpdateFieldDialog = openUpdateFieldDialog,
+//                    viewModel = viewModel,
+//                    user = user!!
+//                )
             }
         }
     }

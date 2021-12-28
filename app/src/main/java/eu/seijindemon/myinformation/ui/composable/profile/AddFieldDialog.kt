@@ -78,8 +78,8 @@ fun AddField(
     user: User,
     openAddFieldDialog: MutableState<Boolean>
 ) {
-    var keyString by remember { mutableStateOf("Type here...") }
-    var valueString by remember { mutableStateOf("Type here...") }
+    var keyString by remember { mutableStateOf("") }
+    var valueString by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
