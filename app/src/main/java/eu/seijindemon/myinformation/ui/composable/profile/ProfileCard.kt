@@ -63,7 +63,9 @@ fun ProfileCard(
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         AutoSizeText(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier
+                                .padding(end = 5.dp)
+                                .weight(1f),
                             text = item.key,
                             maxFontSize = 18.sp,
                             color = Color.White,
@@ -71,7 +73,9 @@ fun ProfileCard(
                             maxLines = 1
                         )
                         AutoSizeText(
-                            modifier = Modifier.weight(1f),
+                            modifier = Modifier
+                                .padding(start = 5.dp)
+                                .weight(1f),
                             text = item.value,
                             maxFontSize = 18.sp,
                             color = Color.White,

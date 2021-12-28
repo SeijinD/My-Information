@@ -27,9 +27,16 @@ import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
 @Composable
 fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
 
-    // Add User
-    val openAddFieldDialog = remember { mutableStateOf(false) }
     val user by  viewModel.user.observeAsState()
+
+    // Add Field
+    val openAddFieldDialog = remember { mutableStateOf(false) }
+
+    // Delete User
+    val openDeleteUserDialog = remember { mutableStateOf(false) }
+
+    // Update User
+    val openUpdateUserDialog = remember { mutableStateOf(false) }
 
     MyInformationTheme {
         Scaffold(
@@ -94,7 +101,39 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                 BottomAppBar(
                     cutoutShape = CircleShape
                 ) {
+                    IconButton(
+                        modifier = Modifier.padding(start = 10.dp),
+                        onClick = {
+                            openUpdateUserDialog.value = true
+                        }
+                    ) {
+                        Icon(Icons.Filled.Update, "")
+                    }
+                    IconButton(
+                        onClick = {
+                            openDeleteUserDialog.value = true
+                        }
+                    ) {
+                        Icon(Icons.Filled.PersonRemove, "")
+                    }
 
+                    Spacer(Modifier.weight(1f, true))
+
+                    IconButton(
+                        onClick = {
+                            // TODO Update Field
+                        }
+                    ) {
+                        Icon(Icons.Filled.ChangeCircle, "")
+                    }
+                    IconButton(
+                        modifier = Modifier.padding(end = 10.dp),
+                        onClick = {
+                            // TODO Remove Field
+                        }
+                    ) {
+                        Icon(Icons.Filled.RemoveCircle, "")
+                    }
                 }
             },
             floatingActionButton = {
@@ -121,6 +160,22 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                 AddFieldDialog(
                     navController = navController,
                     openAddFieldDialog = openAddFieldDialog,
+                    viewModel = viewModel,
+                    user = user!!
+                )
+            }
+            if (openDeleteUserDialog.value && user != null) {
+                DeleteUserDialog(
+                    navController = navController,
+                    openDeleteUserDialog = openDeleteUserDialog,
+                    viewModel = viewModel,
+                    user = user!!
+                )
+            }
+            if (openUpdateUserDialog.value && user != null) {
+                UpdateUserDialog(
+                    navController = navController,
+                    openUpdateUserDialog = openUpdateUserDialog,
                     viewModel = viewModel,
                     user = user!!
                 )

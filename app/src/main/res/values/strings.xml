@@ -14,4 +14,6 @@
     <string name="lastname">LastName</string>
     <string name="generic_error_message">Error!</string>
     <string name="test_progress_tag">Progress</string>
+    <string name="update_user">Update User</string>
+    <string name="delete_user">Delete User</string>
 </resources>

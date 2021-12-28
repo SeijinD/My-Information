@@ -2,7 +2,6 @@ package eu.seijindemon.myinformation.ui.composable.home
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import android.net.Uri
 import androidx.compose.foundation.background
@@ -10,9 +9,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
@@ -145,11 +142,7 @@ fun HomeScreen(
                 BottomAppBar(
                     cutoutShape = CircleShape
                 ) {
-                    Row(
 
-                    ) {
-
-                    }
                 }
             },
             floatingActionButton = {
