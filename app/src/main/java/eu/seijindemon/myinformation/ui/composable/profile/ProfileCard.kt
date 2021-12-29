@@ -26,7 +26,6 @@ fun ProfileCard(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(color = Color.DarkGray)
             .padding(
                 start = 5.dp,
                 end = 5.dp,
@@ -41,13 +40,11 @@ fun ProfileCard(
                 .padding(all = 10.dp),
             text = "${user.firstName} ${user.lastName}",
             maxFontSize = 20.sp,
-            color = Color.White,
             fontWeight = FontWeight.Bold,
             maxLines = 1
         )
         Divider(
-            thickness = 5.dp,
-            color = Color.White
+            thickness = 5.dp
         )
         if (!user.keysValues.isNullOrEmpty()) {
             for (item: KeyValue in user.keysValues!!) {
@@ -68,7 +65,6 @@ fun ProfileCard(
                                 .weight(1f),
                             text = item.key,
                             maxFontSize = 18.sp,
-                            color = Color.White,
                             fontWeight = FontWeight.Medium,
                             maxLines = 1
                         )
@@ -78,15 +74,13 @@ fun ProfileCard(
                                 .weight(1f),
                             text = item.value,
                             maxFontSize = 18.sp,
-                            color = Color.White,
                             fontWeight = FontWeight.Bold,
                             maxLines = 1
                         )
                     }
                 }
                 Divider(
-                    thickness = 1.dp,
-                    color = Color.White
+                    thickness = 2.dp
                 )
             }
         }

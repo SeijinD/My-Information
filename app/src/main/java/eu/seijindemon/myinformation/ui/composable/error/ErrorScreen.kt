@@ -33,7 +33,7 @@ fun ErrorScreen(
             modifier = Modifier.padding(16.dp),
             maxFontSize = 20.sp,
             style = MaterialTheme.typography.body1,
-            color = Red
+            color = MaterialTheme.colors.error
         )
     }
 }

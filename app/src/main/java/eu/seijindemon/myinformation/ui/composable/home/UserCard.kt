@@ -49,7 +49,6 @@ fun UserCard(
             AutoSizeText(
                 text = "${user.firstName} ${user.lastName}",
                 maxFontSize = 18.sp,
-                color = Color.White,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1
             )
@@ -68,7 +67,6 @@ fun UserCard(
             AutoSizeText(
                 text = stringResource(id = R.string.profile),
                 maxFontSize = 15.sp,
-                color = Color.White,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1
             )

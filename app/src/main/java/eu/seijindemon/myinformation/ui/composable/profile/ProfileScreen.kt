@@ -44,7 +44,9 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
     // Update Field
     val openUpdateFieldDialog = remember { mutableStateOf(false) }
 
-    MyInformationTheme {
+    MyInformationTheme(
+        darkTheme = false
+    ) {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -54,7 +56,7 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                     navigationIcon = {
                         IconButton(onClick = { navController.navigate("home") }) {
                             Icon(
-                                Icons.Filled.ArrowBack,
+                                imageVector = Icons.Filled.ArrowBack,
                                 contentDescription = stringResource(id = R.string.back)
                             )
                         }
@@ -71,14 +73,21 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                             openUpdateUserDialog.value = true
                         }
                     ) {
-                        Icon(Icons.Filled.Update, "")
+                        Icon(
+                            tint = MaterialTheme.colors.primary,
+                            imageVector = Icons.Filled.Update,
+                            contentDescription = ""
+                        )
                     }
                     IconButton(
                         onClick = {
                             openDeleteUserDialog.value = true
                         }
                     ) {
-                        Icon(Icons.Filled.PersonRemove, "")
+                        Icon(
+                            imageVector = Icons.Filled.PersonRemove,
+                            contentDescription = ""
+                        )
                     }
 
                     Spacer(Modifier.weight(1f, true))
@@ -88,7 +97,10 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                             openUpdateFieldDialog.value = true
                         }
                     ) {
-                        Icon(Icons.Filled.ChangeCircle, "")
+                        Icon(
+                            imageVector = Icons.Filled.ChangeCircle,
+                            contentDescription = ""
+                        )
                     }
                     IconButton(
                         modifier = Modifier.padding(end = 10.dp),
@@ -96,7 +108,10 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                             openDeleteFieldDialog.value = true
                         }
                     ) {
-                        Icon(Icons.Filled.RemoveCircle, "")
+                        Icon(
+                            imageVector = Icons.Filled.RemoveCircle,
+                            contentDescription = ""
+                        )
                     }
                 }
             },

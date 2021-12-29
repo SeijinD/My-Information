@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import android.net.Uri
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,7 +18,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -74,7 +72,9 @@ fun HomeScreen(
     // Add User
     val openAddUserDialog = remember { mutableStateOf(false) }
 
-    MyInformationTheme {
+    MyInformationTheme(
+        darkTheme = false
+    ) {
         Scaffold(
             topBar = {
                 TopAppBar(
@@ -83,9 +83,8 @@ fun HomeScreen(
                     },
                     actions = {
                         Icon(
-                            Icons.Filled.Language,
+                            imageVector = Icons.Filled.Language,
                             contentDescription = stringResource(id = R.string.change_language),
-                            tint = Color.White,
                             modifier = Modifier
                                 .padding(all = 5.dp)
                                 .clickable(onClick = {
@@ -93,9 +92,8 @@ fun HomeScreen(
                                 })
                         )
                         Icon(
-                            Icons.Filled.Share,
+                            imageVector = Icons.Filled.Share,
                             contentDescription = stringResource(id = R.string.share),
-                            tint = Color.White,
                             modifier = Modifier
                                 .padding(all = 5.dp)
                                 .clickable(onClick = {
@@ -107,9 +105,8 @@ fun HomeScreen(
                                 })
                         )
                         Icon(
-                            Icons.Filled.Star,
+                            imageVector = Icons.Filled.Star,
                             contentDescription = stringResource(id = R.string.rate),
-                            tint = Color.White,
                             modifier = Modifier
                                 .padding(all = 5.dp)
                                 .clickable(onClick = {
@@ -121,9 +118,8 @@ fun HomeScreen(
                                 })
                         )
                         Icon(
-                            Icons.Filled.PrivacyTip,
+                            imageVector = Icons.Filled.PrivacyTip,
                             contentDescription = stringResource(id = R.string.privacy_policy),
-                            tint = Color.White,
                             modifier = Modifier
                                 .padding(all = 5.dp)
                                 .clickable(onClick = {
@@ -152,12 +148,13 @@ fun HomeScreen(
                     }
                 ) {
                     Icon(
+                        tint = MaterialTheme.colors.primary,
                         imageVector = Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.add_user)
                     )
                 }
             },
-            floatingActionButtonPosition =FabPosition.Center,
+            floatingActionButtonPosition = FabPosition.Center,
             isFloatingActionButtonDocked = true
         ) {
             if (users != null) {
@@ -190,8 +187,7 @@ fun HomeContent(
 ) {
     LazyColumn(
         modifier = Modifier
-            .fillMaxSize()
-            .background(color = Color.DarkGray),
+            .fillMaxSize(),
         contentPadding = PaddingValues(
             all = 5.dp
         )

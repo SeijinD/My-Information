@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -49,14 +46,13 @@ fun AddFieldDialog(
                 .padding(all = 5.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .fillMaxWidth()
-                .background(Color.White),
+                .background(MaterialTheme.colors.background),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AutoSizeText(
                 text = stringResource(id = R.string.add_field),
                 maxFontSize = 18.sp,
-                color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1
             )
@@ -96,6 +92,7 @@ fun AddField(
             value = valueString,
             onValueChange = { valueString = it }
         )
+        Divider()
         Button(
             onClick = {
                 val list = mutableListOf<KeyValue>()

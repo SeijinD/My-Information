@@ -7,15 +7,11 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -44,59 +40,81 @@ fun UpdateFieldDialog(
             openUpdateFieldDialog.value = false
         }
     ) {
-        var key by remember { mutableStateOf("") }
-        var value by remember { mutableStateOf("") }
-
-        val list = mutableListOf<KeyValue>()
-        if (!user.keysValues.isNullOrEmpty()) {
-            list.addAll(user.keysValues!!)
-        }
-
         Column(
             modifier = Modifier
                 .padding(all = 5.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .fillMaxWidth()
-                .background(Color.White),
+                .background(MaterialTheme.colors.background),
             verticalArrangement = Arrangement.spacedBy(8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AutoSizeText(
                 text = stringResource(id = R.string.update_field),
                 maxFontSize = 18.sp,
-                color = Color.Black,
                 fontWeight = FontWeight.Bold,
                 maxLines = 1
             )
             Divider()
-            OutlinedTextField(
-                value = key,
-                onValueChange = { key = it }
+            UpdateField(
+                navController = navController,
+                viewModel = viewModel,
+                user = user,
+                openUpdateFieldDialog = openUpdateFieldDialog
             )
-            OutlinedTextField(
-                value = value,
-                onValueChange = { value = it }
-            )
-            Divider()
-            Button(
-                onClick = {
-                    for (item: KeyValue in list) {
-                        if (item.key == key) {
-                            val updatedItem: KeyValue = KeyValue(key = item.key, value = value)
-                            list.remove(item)
-                            list.add(updatedItem)
-                            viewModel.updateUserKeysValues(list, user.id)
-                            openUpdateFieldDialog.value = false
-                            viewModel.getUserById(user.id)
-                            navController.navigate("profile")
-                        }
+        }
+    }
+}
+
+@Composable
+fun UpdateField(
+    navController: NavController,
+    viewModel: AppViewModel,
+    user: User,
+    openUpdateFieldDialog: MutableState<Boolean>
+) {
+    var key by remember { mutableStateOf("") }
+    var value by remember { mutableStateOf("") }
+
+    val list = mutableListOf<KeyValue>()
+    if (!user.keysValues.isNullOrEmpty()) {
+        list.addAll(user.keysValues!!)
+    }
+
+    Column(
+        modifier = Modifier
+            .padding(all = 5.dp)
+            .fillMaxWidth(),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        OutlinedTextField(
+            value = key,
+            onValueChange = { key = it }
+        )
+        OutlinedTextField(
+            value = value,
+            onValueChange = { value = it }
+        )
+        Divider()
+        Button(
+            onClick = {
+                for (item: KeyValue in list) {
+                    if (item.key == key) {
+                        val updatedItem: KeyValue = KeyValue(key = item.key, value = value)
+                        list.remove(item)
+                        list.add(updatedItem)
+                        viewModel.updateUserKeysValues(list, user.id)
+                        openUpdateFieldDialog.value = false
+                        viewModel.getUserById(user.id)
+                        navController.navigate("profile")
                     }
                 }
-            ) {
-                Text(
-                    text = stringResource(id = R.string.update_field)
-                )
             }
+        ) {
+            Text(
+                text = stringResource(id = R.string.update_field)
+            )
         }
     }
 }
