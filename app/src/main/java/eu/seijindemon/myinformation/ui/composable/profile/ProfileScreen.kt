@@ -153,12 +153,12 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                 )
             }
             if (openUpdateFieldDialog.value && user != null) {
-//                UpdateFieldDialog(
-//                    navController = navController,
-//                    openUpdateFieldDialog = openUpdateFieldDialog,
-//                    viewModel = viewModel,
-//                    user = user!!
-//                )
+                UpdateFieldDialog(
+                    navController = navController,
+                    openUpdateFieldDialog = openUpdateFieldDialog,
+                    viewModel = viewModel,
+                    user = user!!
+                )
             }
         }
     }

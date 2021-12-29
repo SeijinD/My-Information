@@ -33,18 +33,19 @@ import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
 
 @Composable
-fun DeleteFieldDialog(
+fun UpdateFieldDialog(
     navController: NavController,
-    openDeleteFieldDialog: MutableState<Boolean>,
+    openUpdateFieldDialog: MutableState<Boolean>,
     viewModel: AppViewModel,
     user: User
 ) {
     Dialog(
         onDismissRequest = {
-            openDeleteFieldDialog.value = false
+            openUpdateFieldDialog.value = false
         }
     ) {
         var key by remember { mutableStateOf("") }
+        var value by remember { mutableStateOf("") }
 
         val list = mutableListOf<KeyValue>()
         if (!user.keysValues.isNullOrEmpty()) {
@@ -61,7 +62,7 @@ fun DeleteFieldDialog(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AutoSizeText(
-                text = stringResource(id = R.string.delete_field),
+                text = stringResource(id = R.string.update_field),
                 maxFontSize = 18.sp,
                 color = Color.Black,
                 fontWeight = FontWeight.Bold,
@@ -72,14 +73,20 @@ fun DeleteFieldDialog(
                 value = key,
                 onValueChange = { key = it }
             )
+            OutlinedTextField(
+                value = value,
+                onValueChange = { value = it }
+            )
             Divider()
             Button(
                 onClick = {
                     for (item: KeyValue in list) {
                         if (item.key == key) {
+                            val updatedItem: KeyValue = KeyValue(key = item.key, value = value)
                             list.remove(item)
+                            list.add(updatedItem)
                             viewModel.updateUserKeysValues(list, user.id)
-                            openDeleteFieldDialog.value = false
+                            openUpdateFieldDialog.value = false
                             viewModel.getUserById(user.id)
                             navController.navigate("profile")
                         }
@@ -87,7 +94,7 @@ fun DeleteFieldDialog(
                 }
             ) {
                 Text(
-                    text = stringResource(id = R.string.delete_field)
+                    text = stringResource(id = R.string.update_field)
                 )
             }
         }
@@ -100,20 +107,20 @@ fun DeleteFieldDialog(
     uiMode = UI_MODE_TYPE_NORMAL
 )
 @Composable
-fun DeleteFieldDialogPreview() {
+fun UpdateFieldDialogPreview() {
     val navController = rememberNavController()
     val viewModel: AppViewModel = viewModel()
-    val openDeleteFieldDialogPreview = remember { mutableStateOf(true) }
+    val openUpdateFieldDialogPreview = remember { mutableStateOf(true) }
     MyInformationTheme {
         val user = User(1, "George", "Karanikolas", listOf(
             KeyValue("AMKA","1234567890"),
             KeyValue("AMKA","1234567890"),
             KeyValue("AMKA","1234567890")
         ))
-        DeleteFieldDialog(
+        UpdateFieldDialog(
             navController = navController,
             viewModel = viewModel,
-            openDeleteFieldDialog = openDeleteFieldDialogPreview,
+            openUpdateFieldDialog = openUpdateFieldDialogPreview,
             user = user
         )
     }
