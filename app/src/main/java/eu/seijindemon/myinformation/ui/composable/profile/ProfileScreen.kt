@@ -74,7 +74,6 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                         }
                     ) {
                         Icon(
-                            tint = MaterialTheme.colors.primary,
                             imageVector = Icons.Filled.Update,
                             contentDescription = ""
                         )
@@ -122,6 +121,7 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                     }
                 ) {
                     Icon(
+                        tint = MaterialTheme.colors.primary,
                         imageVector = Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.add_field)
                     )
