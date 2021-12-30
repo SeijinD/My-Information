@@ -81,7 +81,8 @@ fun HomeScreen(
             snackbarHost = {
                            SnackbarHost(hostState = it) { data ->
                                Snackbar(
-                                   modifier = Modifier.border(2.dp, MaterialTheme.colors.secondary),
+                                   modifier = Modifier
+                                       .border(2.dp, MaterialTheme.colors.secondary),
                                    snackbarData = data
                                )
                            }

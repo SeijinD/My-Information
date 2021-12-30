@@ -23,6 +23,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import eu.seijindemon.myinformation.R
 import eu.seijindemon.myinformation.data.model.User
 import eu.seijindemon.myinformation.ui.composable.general.AutoSizeText
+import eu.seijindemon.myinformation.ui.composable.general.ErrorDialog
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -77,6 +78,9 @@ fun AddUser(
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
 
+    val openErrorDialog = remember { mutableStateOf(false) }
+    var errorMessage = stringResource(id = R.string.generic_error_message)
+    
     Column(
         modifier = Modifier
             .padding(all = 5.dp)
@@ -97,22 +101,28 @@ fun AddUser(
             onClick = {
                 when {
                     firstName.isNullOrEmpty() -> {
-                        scope.launch {
-                            scaffoldState.snackbarHostState.showSnackbar("The firstName is empty.")
-                        }
+//                        scope.launch {
+//                            scaffoldState.snackbarHostState.showSnackbar("The firstName is empty.")
+//                        }
+                        errorMessage = "The firstName is empty."
+                        openErrorDialog.value = true
                     }
                     lastName.isNullOrEmpty() -> {
-                        scope.launch {
-                            scaffoldState.snackbarHostState.showSnackbar("The lastName is empty.")
-                        }
+//                        scope.launch {
+//                            scaffoldState.snackbarHostState.showSnackbar("The user already exists.")
+//                        }
+                        errorMessage = "The user already exists."
+                        openErrorDialog.value = true
                     }
                     checkIfExistUser(
                         users = users!!,
                         firstName = firstName,
                         lastName = lastName) -> {
-                        scope.launch {
-                            scaffoldState.snackbarHostState.showSnackbar("The user already exists.")
-                        }
+//                        scope.launch {
+//                            scaffoldState.snackbarHostState.showSnackbar("The user already exists.")
+//                        }
+                        errorMessage = "The user already exists."
+                        openErrorDialog.value = true
                     }
                     else -> {
                         val user = User(firstName = firstName, lastName = lastName, keysValues = listOf())
@@ -126,6 +136,13 @@ fun AddUser(
                 text = stringResource(id = R.string.add_user)
             )
         }
+    }
+
+    if (openErrorDialog.value) {
+        ErrorDialog(
+            errorMessage = errorMessage,
+            openErrorDialog = openErrorDialog
+        )
     }
 }
 
