@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,11 +25,15 @@ import eu.seijindemon.myinformation.data.model.User
 import eu.seijindemon.myinformation.ui.composable.general.AutoSizeText
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun AddUserDialog(
     openAddUserDialog: MutableState<Boolean>,
-    viewModel: AppViewModel
+    viewModel: AppViewModel,
+    scope: CoroutineScope,
+    scaffoldState: ScaffoldState
 ) {
     Dialog(
         onDismissRequest = {
@@ -54,7 +58,9 @@ fun AddUserDialog(
             Divider()
             AddUser(
                 viewModel = viewModel,
-                openAddUserDialog = openAddUserDialog
+                openAddUserDialog = openAddUserDialog,
+                scope = scope,
+                scaffoldState = scaffoldState
             )
         }
     }
@@ -63,8 +69,11 @@ fun AddUserDialog(
 @Composable
 fun AddUser(
     viewModel: AppViewModel,
-    openAddUserDialog: MutableState<Boolean>
+    openAddUserDialog: MutableState<Boolean>,
+    scope: CoroutineScope,
+    scaffoldState: ScaffoldState
 ) {
+    val users by viewModel.users.observeAsState()
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
 
@@ -86,10 +95,31 @@ fun AddUser(
         Divider()
         Button(
             onClick = {
-                val user = User(firstName = firstName, lastName = lastName, keysValues = listOf())
-                viewModel.addUser(user)
-                openAddUserDialog.value = false
-
+                when {
+                    firstName.isNullOrEmpty() -> {
+                        scope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar("The firstName is empty.")
+                        }
+                    }
+                    lastName.isNullOrEmpty() -> {
+                        scope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar("The lastName is empty.")
+                        }
+                    }
+                    checkIfExistUser(
+                        users = users!!,
+                        firstName = firstName,
+                        lastName = lastName) -> {
+                        scope.launch {
+                            scaffoldState.snackbarHostState.showSnackbar("The user already exists.")
+                        }
+                    }
+                    else -> {
+                        val user = User(firstName = firstName, lastName = lastName, keysValues = listOf())
+                        viewModel.addUser(user)
+                        openAddUserDialog.value = false
+                    }
+                }
             }
         ) {
             Text(
@@ -97,6 +127,21 @@ fun AddUser(
             )
         }
     }
+}
+
+fun checkIfExistUser(
+    users: List<User>,
+    firstName: String,
+    lastName: String
+): Boolean {
+    if (!users.isNullOrEmpty()) {
+        for (user: User in users) {
+            if (user.firstName == firstName && user.lastName == lastName) {
+                return true
+            }
+        }
+    }
+    return false
 }
 
 @Preview(
@@ -108,8 +153,15 @@ fun AddUser(
 fun AddUserDialogPreview() {
     val viewModel: AppViewModel = viewModel()
     val openAddUserDialogPreview = remember { mutableStateOf(true) }
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
     MyInformationTheme {
         val user = User(1, "George", "Karanikolas", null)
-        AddUserDialog(viewModel = viewModel, openAddUserDialog = openAddUserDialogPreview)
+        AddUserDialog(
+            viewModel = viewModel,
+            openAddUserDialog = openAddUserDialogPreview,
+            scope = scope,
+            scaffoldState = scaffoldState
+        )
     }
 }

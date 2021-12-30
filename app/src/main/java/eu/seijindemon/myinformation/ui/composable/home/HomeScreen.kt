@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import android.net.Uri
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -12,11 +13,8 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -72,10 +70,22 @@ fun HomeScreen(
     // Add User
     val openAddUserDialog = remember { mutableStateOf(false) }
 
+    val scaffoldState = rememberScaffoldState()
+    val scope = rememberCoroutineScope()
+
     MyInformationTheme(
         darkTheme = false
     ) {
         Scaffold(
+            scaffoldState = scaffoldState,
+            snackbarHost = {
+                           SnackbarHost(hostState = it) { data ->
+                               Snackbar(
+                                   modifier = Modifier.border(2.dp, MaterialTheme.colors.secondary),
+                                   snackbarData = data
+                               )
+                           }
+            },
             topBar = {
                 TopAppBar(
                     title = {
@@ -172,7 +182,9 @@ fun HomeScreen(
             if (openAddUserDialog.value) {
                 AddUserDialog(
                     openAddUserDialog = openAddUserDialog,
-                    viewModel = viewModel
+                    viewModel = viewModel,
+                    scope = scope,
+                    scaffoldState = scaffoldState
                 )
             }
         }
