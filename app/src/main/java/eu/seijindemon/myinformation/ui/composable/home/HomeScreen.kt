@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import android.net.Uri
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,6 +15,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -27,17 +27,25 @@ import eu.seijindemon.myinformation.R
 import eu.seijindemon.myinformation.data.model.User
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
+import eu.seijindemon.myinformation.ui.viewmodel.LanguageViewModel
+import java.util.*
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: AppViewModel
+    viewModel: AppViewModel,
+    languageViewModel: LanguageViewModel
 ) {
 
     val users by viewModel.users.observeAsState()
 
     val context = LocalContext.current
     val packageName = context.packageName
+
+    // Language
+    val resetLanguage = remember { mutableStateOf(false) }
+    var currentLanguage = languageViewModel.language.observeAsState().value
+    SetLanguage(position = currentLanguage!!)
 
     // Privacy Policy
     val openPrivacyPolicy = remember {
@@ -70,23 +78,10 @@ fun HomeScreen(
     // Add User
     val openAddUserDialog = remember { mutableStateOf(false) }
 
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
-
     MyInformationTheme(
         darkTheme = false
     ) {
         Scaffold(
-            scaffoldState = scaffoldState,
-            snackbarHost = {
-                           SnackbarHost(hostState = it) { data ->
-                               Snackbar(
-                                   modifier = Modifier
-                                       .border(2.dp, MaterialTheme.colors.secondary),
-                                   snackbarData = data
-                               )
-                           }
-            },
             topBar = {
                 TopAppBar(
                     title = {
@@ -177,16 +172,21 @@ fun HomeScreen(
             }
             if (openChangeLanguageDialog.value) {
                 ChangeLanguageDialog(
-                    openChangeLanguageDialog = openChangeLanguageDialog
+                    openChangeLanguageDialog = openChangeLanguageDialog,
+                    resetLanguage = resetLanguage,
+                    languageViewModel = languageViewModel
                 )
             }
             if (openAddUserDialog.value) {
                 AddUserDialog(
                     openAddUserDialog = openAddUserDialog,
-                    viewModel = viewModel,
-                    scope = scope,
-                    scaffoldState = scaffoldState
+                    viewModel = viewModel
                 )
+            }
+            if (resetLanguage.value) {
+                currentLanguage = languageViewModel.language.observeAsState().value
+                SetLanguage(position = currentLanguage!!)
+                resetLanguage.value = false
             }
         }
     }
@@ -213,6 +213,15 @@ fun HomeContent(
             )
         }
     }
+}
+
+@Composable
+private fun SetLanguage(position: Int) {
+    val locale = Locale(if (position == 1) "gr" else "en")
+    val configuration = LocalConfiguration.current
+    configuration.setLocale(locale)
+    val resources = LocalContext.current.resources
+    resources.updateConfiguration(configuration, resources.displayMetrics)
 }
 
 @Preview(

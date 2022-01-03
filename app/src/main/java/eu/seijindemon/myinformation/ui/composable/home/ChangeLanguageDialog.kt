@@ -18,14 +18,21 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import eu.seijindemon.myinformation.R
 import eu.seijindemon.myinformation.ui.composable.general.AutoSizeText
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
+import eu.seijindemon.myinformation.ui.viewmodel.LanguageViewModel
+import kotlinx.coroutines.launch
 
 @Composable
 fun ChangeLanguageDialog(
-    openChangeLanguageDialog: MutableState<Boolean>
+    openChangeLanguageDialog: MutableState<Boolean>,
+    resetLanguage: MutableState<Boolean>,
+    languageViewModel: LanguageViewModel
 ) {
+    val languageScope = rememberCoroutineScope()
+
     AlertDialog(
         backgroundColor = Color.White,
         shape = RoundedCornerShape(10.dp),
@@ -44,7 +51,11 @@ fun ChangeLanguageDialog(
                     modifier = Modifier
                         .padding(5.dp),
                     onClick = {
-                        // TODO Change language English
+                        languageScope.launch {
+                            languageViewModel.saveLanguage(0)
+                            resetLanguage.value = true
+                            openChangeLanguageDialog.value = false
+                        }
                     }
                 ) {
                     Text(
@@ -55,7 +66,11 @@ fun ChangeLanguageDialog(
                     modifier = Modifier
                         .padding(5.dp),
                     onClick = {
-                        // TODO Change language Greek
+                        languageScope.launch {
+                            languageViewModel.saveLanguage(1)
+                            resetLanguage.value = true
+                            openChangeLanguageDialog.value = false
+                        }
                     }
                 ) {
                     Text(
@@ -86,8 +101,12 @@ fun ChangeLanguageDialog(
 fun ChangeLanguageDialogPreview() {
     MyInformationTheme {
         val openChangeLanguageDialogPreview = remember { mutableStateOf(true) }
+        val resetLanguagePreview = remember { mutableStateOf(false) }
+        val languageViewModel: LanguageViewModel = viewModel()
         ChangeLanguageDialog(
-            openChangeLanguageDialog = openChangeLanguageDialogPreview
+            openChangeLanguageDialog = openChangeLanguageDialogPreview,
+            resetLanguage = resetLanguagePreview,
+            languageViewModel = languageViewModel
         )
     }
 }

@@ -13,6 +13,7 @@ import eu.seijindemon.myinformation.ui.composable.home.HomeScreen
 import eu.seijindemon.myinformation.ui.composable.profile.ProfileScreen
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
+import eu.seijindemon.myinformation.ui.viewmodel.LanguageViewModel
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -31,9 +32,10 @@ class MainActivity : ComponentActivity() {
 fun NavigationComponent() {
     val navController = rememberNavController()
     val viewModel: AppViewModel = viewModel()
+    val languageViewModel: LanguageViewModel = viewModel()
 
     NavHost(navController = navController, startDestination = "home") {
-        composable("home") { HomeScreen(navController, viewModel) }
+        composable("home") { HomeScreen(navController, viewModel, languageViewModel) }
         composable("profile") { ProfileScreen(navController, viewModel) }
     }
 }
