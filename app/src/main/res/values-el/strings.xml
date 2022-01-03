@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Οι πληροφορίες μου</string>
+    <string name="add_user">Προσθήκη Χρήστη</string>
+    <string name="add_field">Προσθήκη Πεδίου</string>
+    <string name="back">Πίσω</string>
+    <string name="profile">Προφίλ</string>
+    <string name="share">Κοινοποίηση</string>
+    <string name="rate">Αξιολόγηση</string>
+    <string name="privacy_policy">Πολιτική Απορρήτου</string>
+    <string name="change_language">Αλλαγή γλώσσας</string>
+    <string name="english">Αγγλικά</string>
+    <string name="greek">Ελληνικά</string>
+    <string name="firstname">Όνομα</string>
+    <string name="lastname">Επίθετο</string>
+    <string name="generic_error_message">Σφάλμα!</string>
+    <string name="test_progress_tag">Πρόοδος</string>
+    <string name="update_user">Ενημέρωση Χρήστη</string>
+    <string name="delete_user">Διαγραφή Χρήστη</string>
+    <string name="delete_field">Διαγραφή Πεδίου</string>
+    <string name="update_field">Ενημέρωση Πεδίου</string>
 </resources>
