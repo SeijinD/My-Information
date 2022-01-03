@@ -26,15 +26,11 @@ import eu.seijindemon.myinformation.ui.composable.general.AutoSizeText
 import eu.seijindemon.myinformation.ui.composable.general.ErrorDialog
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 @Composable
 fun AddUserDialog(
     openAddUserDialog: MutableState<Boolean>,
-    viewModel: AppViewModel,
-    scope: CoroutineScope,
-    scaffoldState: ScaffoldState
+    viewModel: AppViewModel
 ) {
     Dialog(
         onDismissRequest = {
@@ -59,9 +55,7 @@ fun AddUserDialog(
             Divider()
             AddUser(
                 viewModel = viewModel,
-                openAddUserDialog = openAddUserDialog,
-                scope = scope,
-                scaffoldState = scaffoldState
+                openAddUserDialog = openAddUserDialog
             )
         }
     }
@@ -70,16 +64,14 @@ fun AddUserDialog(
 @Composable
 fun AddUser(
     viewModel: AppViewModel,
-    openAddUserDialog: MutableState<Boolean>,
-    scope: CoroutineScope,
-    scaffoldState: ScaffoldState
+    openAddUserDialog: MutableState<Boolean>
 ) {
     val users by viewModel.users.observeAsState()
     var firstName by remember { mutableStateOf("") }
     var lastName by remember { mutableStateOf("") }
 
     val openErrorDialog = remember { mutableStateOf(false) }
-    var errorMessage = stringResource(id = R.string.generic_error_message)
+    val errorMessage = remember { mutableStateOf("") }
     
     Column(
         modifier = Modifier
@@ -100,28 +92,19 @@ fun AddUser(
         Button(
             onClick = {
                 when {
-                    firstName.isNullOrEmpty() -> {
-//                        scope.launch {
-//                            scaffoldState.snackbarHostState.showSnackbar("The firstName is empty.")
-//                        }
-                        errorMessage = "The firstName is empty."
+                    firstName.isEmpty() -> {
+                        errorMessage.value = "The firstName is empty."
                         openErrorDialog.value = true
                     }
-                    lastName.isNullOrEmpty() -> {
-//                        scope.launch {
-//                            scaffoldState.snackbarHostState.showSnackbar("The user already exists.")
-//                        }
-                        errorMessage = "The user already exists."
+                    lastName.isEmpty() -> {
+                        errorMessage.value = "The lastName is empty."
                         openErrorDialog.value = true
                     }
                     checkIfExistUser(
                         users = users!!,
                         firstName = firstName,
                         lastName = lastName) -> {
-//                        scope.launch {
-//                            scaffoldState.snackbarHostState.showSnackbar("The user already exists.")
-//                        }
-                        errorMessage = "The user already exists."
+                        errorMessage.value = "The user already exists."
                         openErrorDialog.value = true
                     }
                     else -> {
@@ -170,15 +153,10 @@ fun checkIfExistUser(
 fun AddUserDialogPreview() {
     val viewModel: AppViewModel = viewModel()
     val openAddUserDialogPreview = remember { mutableStateOf(true) }
-    val scaffoldState = rememberScaffoldState()
-    val scope = rememberCoroutineScope()
     MyInformationTheme {
-        val user = User(1, "George", "Karanikolas", null)
         AddUserDialog(
             viewModel = viewModel,
-            openAddUserDialog = openAddUserDialogPreview,
-            scope = scope,
-            scaffoldState = scaffoldState
+            openAddUserDialog = openAddUserDialogPreview
         )
     }
 }

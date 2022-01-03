@@ -21,7 +21,7 @@ import eu.seijindemon.myinformation.R
 
 @Composable
 fun ErrorDialog(
-    errorMessage: String?,
+    errorMessage: MutableState<String>,
     openErrorDialog: MutableState<Boolean>
 ) {
     Dialog(
@@ -39,7 +39,7 @@ fun ErrorDialog(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AutoSizeText(
-                text = errorMessage ?: stringResource(id = R.string.generic_error_message),
+                text = errorMessage.value,
                 modifier = Modifier.padding(16.dp),
                 maxFontSize = 20.sp,
                 style = MaterialTheme.typography.body1,
@@ -57,8 +57,9 @@ fun ErrorDialog(
 @Composable
 fun ErrorScreenPreview() {
     val openErrorDialog = remember { mutableStateOf(false) }
+    val errorMessage = remember { mutableStateOf("") }
     ErrorDialog(
-        errorMessage = "Error Message!",
+        errorMessage = errorMessage,
         openErrorDialog = openErrorDialog
     )
 }
