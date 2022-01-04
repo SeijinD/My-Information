@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import eu.seijindemon.myinformation.ui.composable.home.HomeScreen
 import eu.seijindemon.myinformation.ui.composable.profile.ProfileScreen
+import eu.seijindemon.myinformation.ui.composable.splash.SplashScreen
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
 import eu.seijindemon.myinformation.ui.viewmodel.LanguageViewModel
@@ -34,7 +35,8 @@ fun NavigationComponent() {
     val viewModel: AppViewModel = viewModel()
     val languageViewModel: LanguageViewModel = viewModel()
 
-    NavHost(navController = navController, startDestination = "home") {
+    NavHost(navController = navController, startDestination = "splash") {
+        composable("splash") { SplashScreen(navController) }
         composable("home") { HomeScreen(navController, viewModel, languageViewModel) }
         composable("profile") { ProfileScreen(navController, viewModel) }
     }
