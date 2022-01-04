@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +26,7 @@ import eu.seijindemon.myinformation.R
 import eu.seijindemon.myinformation.data.model.KeyValue
 import eu.seijindemon.myinformation.data.model.User
 import eu.seijindemon.myinformation.ui.composable.general.AutoSizeText
+import eu.seijindemon.myinformation.ui.composable.general.ErrorDialog
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
 
@@ -74,8 +75,12 @@ fun UpdateUser(
     openUpdateUserDialog: MutableState<Boolean>,
     navController: NavController,
 ) {
+    val users by viewModel.users.observeAsState()
     var firstName by remember { mutableStateOf(user.firstName) }
     var lastName by remember { mutableStateOf(user.lastName) }
+
+    val openErrorDialog = remember { mutableStateOf(false) }
+    val errorMessage = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -95,10 +100,31 @@ fun UpdateUser(
         Divider()
         Button(
             onClick = {
-                val updatedUser = User(id = user.id, firstName = firstName, lastName = lastName, keysValues = user.keysValues)
-                viewModel.updateUser(updatedUser)
-                openUpdateUserDialog.value = false
-                navController.navigate("home")
+                when {
+                    firstName.isEmpty() -> {
+                        errorMessage.value = "The firstName is empty."
+                        openErrorDialog.value = true
+                    }
+                    lastName.isEmpty() -> {
+                        errorMessage.value = "The lastName is empty."
+                        openErrorDialog.value = true
+                    }
+                    checkIfExistUser(
+                        alreadyUser = user,
+                        users = users!!,
+                        firstName = firstName,
+                        lastName = lastName
+                    ) -> {
+                        errorMessage.value = "The user already exists."
+                        openErrorDialog.value = true
+                    }
+                    else -> {
+                        val updatedUser = User(id = user.id, firstName = firstName, lastName = lastName, keysValues = user.keysValues)
+                        viewModel.updateUser(updatedUser)
+                        openUpdateUserDialog.value = false
+                        navController.navigate("home")
+                    }
+                }
             }
         ) {
             Text(
@@ -106,6 +132,35 @@ fun UpdateUser(
             )
         }
     }
+
+    if (openErrorDialog.value) {
+        ErrorDialog(
+            errorMessage = errorMessage,
+            openErrorDialog = openErrorDialog
+        )
+    }
+}
+
+fun checkIfExistUser(
+    alreadyUser: User,
+    users: List<User>,
+    firstName: String,
+    lastName: String
+): Boolean {
+    if (!users.isNullOrEmpty()) {
+        for (user: User in users) {
+            if (user.firstName == firstName &&
+                user.lastName == lastName) {
+                if (user.firstName == alreadyUser.firstName &&
+                    user.lastName == alreadyUser.lastName) {
+                    return false
+                }
+                return true
+            }
+        }
+        return false
+    }
+    return false
 }
 
 @Preview(
