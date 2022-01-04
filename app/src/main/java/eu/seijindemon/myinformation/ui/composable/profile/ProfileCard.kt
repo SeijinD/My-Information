@@ -1,11 +1,16 @@
 package eu.seijindemon.myinformation.ui.composable.profile
 
 import android.content.res.Configuration
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -21,7 +26,10 @@ import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 
 @Composable
 fun ProfileCard(
-    user: User
+    user: User,
+    selectedField: MutableState<Boolean>,
+    selectedFieldKey: MutableState<String>,
+    selectedFieldValue: MutableState<String>
 ) {
     Column(
         modifier = Modifier
@@ -47,18 +55,29 @@ fun ProfileCard(
             thickness = 5.dp
         )
         if (!user.keysValues.isNullOrEmpty()) {
-            for (item: KeyValue in user.keysValues!!) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(all = 5.dp),
-                    verticalArrangement = Arrangement.Top,
-                    horizontalAlignment = Alignment.Start
-                ) {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth(),
+                verticalArrangement = Arrangement.Top,
+                horizontalAlignment = Alignment.Start,
+                contentPadding = PaddingValues(all = 5.dp)
+            ) {
+                items(user.keysValues!!) { item ->
                     Row(
-                        modifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 5.dp)
+                            .selectable(
+                                selected = selectedFieldKey.value == item.key,
+                                onClick = {
+                                    selectedField.value = true
+                                    selectedFieldKey.value = item.key
+                                    selectedFieldValue.value = item.value
+                                }
+                            ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
+                        val color = if (selectedField.value && item.key == selectedFieldKey.value) { Color.Red } else { Color.Unspecified }
                         AutoSizeText(
                             modifier = Modifier
                                 .padding(end = 5.dp)
@@ -66,7 +85,8 @@ fun ProfileCard(
                             text = item.key,
                             maxFontSize = 18.sp,
                             fontWeight = FontWeight.Medium,
-                            maxLines = 1
+                            maxLines = 1,
+                            color = color
                         )
                         AutoSizeText(
                             modifier = Modifier
@@ -75,16 +95,16 @@ fun ProfileCard(
                             text = item.value,
                             maxFontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
-                            maxLines = 1
+                            maxLines = 1,
+                            color = color
                         )
                     }
+                    Divider(
+                        thickness = 2.dp
+                    )
                 }
-                Divider(
-                    thickness = 2.dp
-                )
             }
         }
-
     }
 }
 
@@ -101,8 +121,14 @@ fun ProfileCardPreview() {
             KeyValue("AMKA","1234567890"),
             KeyValue("AMKA","1234567890")
         ))
+        val selectedField = remember { mutableStateOf(false) }
+        val selectedFieldKey = remember { mutableStateOf("") }
+        val selectedFieldValue = remember { mutableStateOf("") }
         ProfileCard(
-            user = user
+            user = user,
+            selectedField = selectedField,
+            selectedFieldKey = selectedFieldKey,
+            selectedFieldValue = selectedFieldValue
         )
     }
 }

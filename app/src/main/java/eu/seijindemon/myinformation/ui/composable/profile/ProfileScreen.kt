@@ -1,19 +1,14 @@
 package eu.seijindemon.myinformation.ui.composable.profile
 
 import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -43,6 +38,10 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
 
     // Update Field
     val openUpdateFieldDialog = remember { mutableStateOf(false) }
+
+    val selectedField = remember { mutableStateOf(false) }
+    val selectedFieldKey = remember { mutableStateOf("") }
+    val selectedFieldValue = remember { mutableStateOf("") }
 
     MyInformationTheme(
         darkTheme = false
@@ -91,26 +90,28 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
 
                     Spacer(Modifier.weight(1f, true))
 
-                    IconButton(
-                        onClick = {
-                            openUpdateFieldDialog.value = true
+                    if (selectedField.value) {
+                        IconButton(
+                            onClick = {
+                                openUpdateFieldDialog.value = true
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.ChangeCircle,
+                                contentDescription = ""
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.ChangeCircle,
-                            contentDescription = ""
-                        )
-                    }
-                    IconButton(
-                        modifier = Modifier.padding(end = 10.dp),
-                        onClick = {
-                            openDeleteFieldDialog.value = true
+                        IconButton(
+                            modifier = Modifier.padding(end = 10.dp),
+                            onClick = {
+                                openDeleteFieldDialog.value = true
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.RemoveCircle,
+                                contentDescription = ""
+                            )
                         }
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.RemoveCircle,
-                            contentDescription = ""
-                        )
                     }
                 }
             },
@@ -132,7 +133,10 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
         ) {
             if (user != null) {
                 ProfileContent(
-                    user = user!!
+                    user = user!!,
+                    selectedField = selectedField,
+                    selectedFieldKey = selectedFieldKey,
+                    selectedFieldValue = selectedFieldValue
                 )
             }
             if (openAddFieldDialog.value && user != null) {
@@ -164,7 +168,8 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                     navController = navController,
                     openDeleteFieldDialog = openDeleteFieldDialog,
                     viewModel = viewModel,
-                    user = user!!
+                    user = user!!,
+                    selectedFieldKey = selectedFieldKey
                 )
             }
             if (openUpdateFieldDialog.value && user != null) {
@@ -172,7 +177,9 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
                     navController = navController,
                     openUpdateFieldDialog = openUpdateFieldDialog,
                     viewModel = viewModel,
-                    user = user!!
+                    user = user!!,
+                    selectedFieldKey = selectedFieldKey,
+                    selectedFieldValue = selectedFieldValue
                 )
             }
         }
@@ -181,9 +188,17 @@ fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
 
 @Composable
 fun ProfileContent(
-    user: User
+    user: User,
+    selectedField: MutableState<Boolean>,
+    selectedFieldKey: MutableState<String>,
+    selectedFieldValue: MutableState<String>
 ) {
-    ProfileCard(user = user)
+    ProfileCard(
+        user = user,
+        selectedField = selectedField,
+        selectedFieldKey = selectedFieldKey,
+        selectedFieldValue = selectedFieldValue
+    )
 }
 
 @Preview(
@@ -198,9 +213,15 @@ fun ProfileContentPreview() {
         KeyValue("AMKA","1234567890"),
         KeyValue("AMKA","1234567890")
     ))
+    val selectedField = remember { mutableStateOf(false) }
+    val selectedFieldKey = remember { mutableStateOf("") }
+    val selectedFieldValue = remember { mutableStateOf("") }
     MyInformationTheme {
         ProfileContent(
-            user = user
+            user = user,
+            selectedField = selectedField,
+            selectedFieldKey = selectedFieldKey,
+            selectedFieldValue = selectedFieldValue
         )
     }
 }

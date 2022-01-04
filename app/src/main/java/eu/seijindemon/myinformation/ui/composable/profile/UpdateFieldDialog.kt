@@ -34,7 +34,9 @@ fun UpdateFieldDialog(
     navController: NavController,
     openUpdateFieldDialog: MutableState<Boolean>,
     viewModel: AppViewModel,
-    user: User
+    user: User,
+    selectedFieldKey: MutableState<String>,
+    selectedFieldValue: MutableState<String>
 ) {
     Dialog(
         onDismissRequest = {
@@ -61,7 +63,9 @@ fun UpdateFieldDialog(
                 navController = navController,
                 viewModel = viewModel,
                 user = user,
-                openUpdateFieldDialog = openUpdateFieldDialog
+                openUpdateFieldDialog = openUpdateFieldDialog,
+                selectedFieldKey = selectedFieldKey,
+                selectedFieldValue = selectedFieldValue
             )
         }
     }
@@ -72,10 +76,12 @@ fun UpdateField(
     navController: NavController,
     viewModel: AppViewModel,
     user: User,
-    openUpdateFieldDialog: MutableState<Boolean>
+    openUpdateFieldDialog: MutableState<Boolean>,
+    selectedFieldKey: MutableState<String>,
+    selectedFieldValue: MutableState<String>
 ) {
-    var key by remember { mutableStateOf("") }
-    var value by remember { mutableStateOf("") }
+    var key by remember { mutableStateOf(selectedFieldKey.value) }
+    var value by remember { mutableStateOf(selectedFieldValue.value) }
 
     val openErrorDialog = remember { mutableStateOf(false) }
     val errorMessage = remember { mutableStateOf("") }
@@ -94,7 +100,8 @@ fun UpdateField(
     ) {
         OutlinedTextField(
             value = key,
-            onValueChange = { key = it }
+            onValueChange = { key = it },
+            enabled = false
         )
         OutlinedTextField(
             value = value,
@@ -152,6 +159,8 @@ fun UpdateFieldDialogPreview() {
     val navController = rememberNavController()
     val viewModel: AppViewModel = viewModel()
     val openUpdateFieldDialogPreview = remember { mutableStateOf(true) }
+    val selectedFieldKey = remember { mutableStateOf("") }
+    val selectedFieldValue = remember { mutableStateOf("") }
     MyInformationTheme {
         val user = User(1, "George", "Karanikolas", listOf(
             KeyValue("AMKA","1234567890"),
@@ -162,7 +171,9 @@ fun UpdateFieldDialogPreview() {
             navController = navController,
             viewModel = viewModel,
             openUpdateFieldDialog = openUpdateFieldDialogPreview,
-            user = user
+            user = user,
+            selectedFieldKey = selectedFieldKey,
+            selectedFieldValue = selectedFieldValue
         )
     }
 }

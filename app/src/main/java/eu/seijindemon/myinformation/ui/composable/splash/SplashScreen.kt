@@ -45,7 +45,7 @@ fun SplashContent(
                 }
             )
         )
-        delay(3000L)
+        delay(2000L)
     }
 
     LaunchedEffect(key1 = true) {

@@ -34,7 +34,8 @@ fun DeleteFieldDialog(
     navController: NavController,
     openDeleteFieldDialog: MutableState<Boolean>,
     viewModel: AppViewModel,
-    user: User
+    user: User,
+    selectedFieldKey: MutableState<String>
 ) {
     Dialog(
         onDismissRequest = {
@@ -61,7 +62,8 @@ fun DeleteFieldDialog(
                 navController = navController,
                 viewModel = viewModel,
                 user = user,
-                openDeleteFieldDialog = openDeleteFieldDialog
+                openDeleteFieldDialog = openDeleteFieldDialog,
+                selectedFieldKey = selectedFieldKey
             )
         }
     }
@@ -72,9 +74,10 @@ fun DeleteField(
     navController: NavController,
     viewModel: AppViewModel,
     user: User,
-    openDeleteFieldDialog: MutableState<Boolean>
+    openDeleteFieldDialog: MutableState<Boolean>,
+    selectedFieldKey: MutableState<String>,
 ) {
-    var key by remember { mutableStateOf("") }
+    val key by remember { mutableStateOf(selectedFieldKey.value) }
 
     val list = mutableListOf<KeyValue>()
     if (!user.keysValues.isNullOrEmpty()) {
@@ -88,10 +91,6 @@ fun DeleteField(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        OutlinedTextField(
-            value = key,
-            onValueChange = { key = it }
-        )
         Divider()
         Button(
             onClick = {
@@ -123,6 +122,7 @@ fun DeleteFieldDialogPreview() {
     val navController = rememberNavController()
     val viewModel: AppViewModel = viewModel()
     val openDeleteFieldDialogPreview = remember { mutableStateOf(true) }
+    val selectedFieldKey = remember { mutableStateOf("") }
     MyInformationTheme {
         val user = User(1, "George", "Karanikolas", listOf(
             KeyValue("AMKA","1234567890"),
@@ -133,7 +133,8 @@ fun DeleteFieldDialogPreview() {
             navController = navController,
             viewModel = viewModel,
             openDeleteFieldDialog = openDeleteFieldDialogPreview,
-            user = user
+            user = user,
+            selectedFieldKey = selectedFieldKey
         )
     }
 }
