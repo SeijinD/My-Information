@@ -25,6 +25,7 @@ import eu.seijindemon.myinformation.R
 import eu.seijindemon.myinformation.data.model.KeyValue
 import eu.seijindemon.myinformation.data.model.User
 import eu.seijindemon.myinformation.ui.composable.general.AutoSizeText
+import eu.seijindemon.myinformation.ui.composable.general.ErrorDialog
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
 
@@ -76,6 +77,9 @@ fun UpdateField(
     var key by remember { mutableStateOf("") }
     var value by remember { mutableStateOf("") }
 
+    val openErrorDialog = remember { mutableStateOf(false) }
+    val errorMessage = remember { mutableStateOf("") }
+
     val list = mutableListOf<KeyValue>()
     if (!user.keysValues.isNullOrEmpty()) {
         list.addAll(user.keysValues!!)
@@ -99,15 +103,27 @@ fun UpdateField(
         Divider()
         Button(
             onClick = {
-                for (item: KeyValue in list) {
-                    if (item.key == key) {
-                        val updatedItem: KeyValue = KeyValue(key = item.key, value = value)
-                        list.remove(item)
-                        list.add(updatedItem)
-                        viewModel.updateUserKeysValues(list, user.id)
-                        openUpdateFieldDialog.value = false
-                        viewModel.getUserById(user.id)
-                        navController.navigate("profile")
+                when {
+                    key.isEmpty() -> {
+                        errorMessage.value = "The key is empty."
+                        openErrorDialog.value = true
+                    }
+                    value.isEmpty() -> {
+                        errorMessage.value = "The value is empty."
+                        openErrorDialog.value = true
+                    }
+                    else -> {
+                        for (item: KeyValue in list) {
+                            if (item.key == key) {
+                                val updatedItem: KeyValue = KeyValue(key = item.key, value = value)
+                                list.remove(item)
+                                list.add(updatedItem)
+                                viewModel.updateUserKeysValues(list, user.id)
+                                openUpdateFieldDialog.value = false
+                                viewModel.getUserById(user.id)
+                                navController.navigate("profile")
+                            }
+                        }
                     }
                 }
             }
@@ -116,6 +132,13 @@ fun UpdateField(
                 text = stringResource(id = R.string.update_field)
             )
         }
+    }
+
+    if (openErrorDialog.value) {
+        ErrorDialog(
+            errorMessage = errorMessage,
+            openErrorDialog = openErrorDialog
+        )
     }
 }
 

@@ -12,7 +12,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +25,7 @@ import eu.seijindemon.myinformation.R
 import eu.seijindemon.myinformation.data.model.KeyValue
 import eu.seijindemon.myinformation.data.model.User
 import eu.seijindemon.myinformation.ui.composable.general.AutoSizeText
+import eu.seijindemon.myinformation.ui.composable.general.ErrorDialog
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
 
@@ -74,8 +74,11 @@ fun AddField(
     user: User,
     openAddFieldDialog: MutableState<Boolean>
 ) {
-    var keyString by remember { mutableStateOf("") }
-    var valueString by remember { mutableStateOf("") }
+    var key by remember { mutableStateOf("") }
+    var value by remember { mutableStateOf("") }
+
+    val openErrorDialog = remember { mutableStateOf(false) }
+    val errorMessage = remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -85,12 +88,12 @@ fun AddField(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         OutlinedTextField(
-            value = keyString,
-            onValueChange = { keyString = it }
+            value = key,
+            onValueChange = { key = it }
         )
         OutlinedTextField(
-            value = valueString,
-            onValueChange = { valueString = it }
+            value = value,
+            onValueChange = { value = it }
         )
         Divider()
         Button(
@@ -99,11 +102,30 @@ fun AddField(
                 if (!user.keysValues.isNullOrEmpty()) {
                     list.addAll(user.keysValues!!)
                 }
-                list.add(KeyValue(keyString, valueString))
-                viewModel.updateUserKeysValues(list, user.id)
-                openAddFieldDialog.value = false
-                viewModel.getUserById(user.id)
-                navController.navigate("profile")
+                when {
+                    key.isEmpty() -> {
+                        errorMessage.value = "The key is empty."
+                        openErrorDialog.value = true
+                    }
+                    value.isEmpty() -> {
+                        errorMessage.value = "The value is empty."
+                        openErrorDialog.value = true
+                    }
+                    checkIfExistField(
+                        list = list,
+                        key = key
+                    ) -> {
+                        errorMessage.value = "The field already exists."
+                        openErrorDialog.value = true
+                    }
+                    else -> {
+                        list.add(KeyValue(key, value))
+                        viewModel.updateUserKeysValues(list, user.id)
+                        openAddFieldDialog.value = false
+                        viewModel.getUserById(user.id)
+                        navController.navigate("profile")
+                    }
+                }
             }
         ) {
             Text(
@@ -111,6 +133,28 @@ fun AddField(
             )
         }
     }
+
+    if (openErrorDialog.value) {
+        ErrorDialog(
+            errorMessage = errorMessage,
+            openErrorDialog = openErrorDialog
+        )
+    }
+}
+
+fun checkIfExistField(
+    list: MutableList<KeyValue>,
+    key: String
+): Boolean {
+    if (!list.isNullOrEmpty()) {
+        for (keyValue: KeyValue in list) {
+            if (keyValue.key == key) {
+                return true
+            }
+            return false
+        }
+    }
+    return false
 }
 
 @Preview(

@@ -103,7 +103,8 @@ fun AddUser(
                     checkIfExistUser(
                         users = users!!,
                         firstName = firstName,
-                        lastName = lastName) -> {
+                        lastName = lastName
+                    ) -> {
                         errorMessage.value = "The user already exists."
                         openErrorDialog.value = true
                     }
