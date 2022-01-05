@@ -18,7 +18,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
@@ -32,10 +31,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import eu.seijindemon.myinformation.R
 import eu.seijindemon.myinformation.ui.composable.general.AutoSizeText
+import eu.seijindemon.myinformation.ui.composable.general.SetLanguage
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.LanguageViewModel
 import kotlinx.coroutines.launch
-import java.util.*
 
 @Composable
 fun SettingsScreen(
@@ -208,14 +207,14 @@ fun DropDownMenuLanguage(
     var currentLanguage = languageViewModel.language.observeAsState().value
 
     val expanded = remember { mutableStateOf(false) }
-    val languages = listOf("English", "Greek")
+    val languages = listOf(stringResource(id = R.string.english), stringResource(id = R.string.greek))
     val selectedIndex = remember { mutableStateOf(0) }
     val selectedText = remember { mutableStateOf(value = "") }
 
     when(currentLanguage) {
-        0 -> selectedText.value = "English"
-        1 -> selectedText.value = "Greek"
-        else -> selectedText.value = "English"
+        0 -> selectedText.value = stringResource(id = R.string.english)
+        1 -> selectedText.value = stringResource(id = R.string.greek)
+        else -> selectedText.value = stringResource(id = R.string.english)
     }
 
     val textFieldSize = remember { mutableStateOf(Size.Zero) }
@@ -290,21 +289,6 @@ fun settingsRowModifier(
                 // TODO Error
             }
         }
-}
-
-@Composable
-private fun SetLanguage(language: Int) {
-    val locale = Locale(
-        when(language) {
-            0 -> "en"
-            1 -> "el"
-            else -> "en"
-        }
-    )
-    val configuration = LocalConfiguration.current
-    configuration.setLocale(locale)
-    val resources = LocalContext.current.resources
-    resources.updateConfiguration(configuration, resources.displayMetrics)
 }
 
 @Preview(

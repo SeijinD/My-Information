@@ -12,8 +12,6 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalConfiguration
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -22,10 +20,10 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import eu.seijindemon.myinformation.R
 import eu.seijindemon.myinformation.data.model.User
+import eu.seijindemon.myinformation.ui.composable.general.SetLanguage
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
 import eu.seijindemon.myinformation.ui.viewmodel.LanguageViewModel
-import java.util.*
 
 @Composable
 fun HomeScreen(
@@ -125,21 +123,6 @@ fun HomeContent(
             )
         }
     }
-}
-
-@Composable
-private fun SetLanguage(language: Int) {
-    val locale = Locale(
-        when(language) {
-            0 -> "en"
-            1 -> "el"
-            else -> "en"
-        }
-    )
-    val configuration = LocalConfiguration.current
-    configuration.setLocale(locale)
-    val resources = LocalContext.current.resources
-    resources.updateConfiguration(configuration, resources.displayMetrics)
 }
 
 @Preview(
