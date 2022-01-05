@@ -18,4 +18,5 @@
     <string name="delete_user">Delete User</string>
     <string name="delete_field">Delete Field</string>
     <string name="update_field">Update Field</string>
+    <string name="settings">Settings</string>
 </resources>

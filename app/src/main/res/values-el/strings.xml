@@ -19,4 +19,5 @@
     <string name="delete_user">Διαγραφή Χρήστη</string>
     <string name="delete_field">Διαγραφή Πεδίου</string>
     <string name="update_field">Ενημέρωση Πεδίου</string>
+    <string name="settings">Ρυθμίσεις</string>
 </resources>

@@ -1,9 +1,6 @@
 package eu.seijindemon.myinformation.ui.composable.home
 
-import android.content.ActivityNotFoundException
-import android.content.Intent
 import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
-import android.net.Uri
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,45 +33,12 @@ fun HomeScreen(
     viewModel: AppViewModel,
     languageViewModel: LanguageViewModel
 ) {
+    // Language
+    val currentLanguage = languageViewModel.language.observeAsState().value
+    SetLanguage(language = currentLanguage!!)
 
     val users by viewModel.users.observeAsState()
 
-    val context = LocalContext.current
-    val packageName = context.packageName
-
-    // Language
-    val resetLanguage = remember { mutableStateOf(false) }
-    var currentLanguage = languageViewModel.language.observeAsState().value
-    SetLanguage(position = currentLanguage!!)
-
-    // Privacy Policy
-    val openPrivacyPolicy = remember {
-        Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("https://my-informations.flycricket.io/privacy.html"))
-    }
-    // Rate
-    val openRate1 = remember {
-        Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("market://details?id=$packageName"))
-    }
-    val openRate2 = remember {
-        Intent(
-            Intent.ACTION_VIEW,
-            Uri.parse("http://play.google.com/store/apps/details?id=$packageName"))
-    }
-    // Share
-    val sendIntent: Intent = Intent().apply {
-        action = Intent.ACTION_SEND
-        putExtra(Intent.EXTRA_SUBJECT, "My Information")
-        putExtra(Intent.EXTRA_TEXT, "Download this App now: http://play.google.com/store/apps/details?id=${context.packageName}")
-        type = "text/plain"
-    }
-    val shareIntent = Intent.createChooser(sendIntent, null)
-    val openShare = remember { shareIntent }
-    // Change Language
-    val openChangeLanguageDialog = remember { mutableStateOf(false) }
     // Add User
     val openAddUserDialog = remember { mutableStateOf(false) }
 
@@ -89,52 +53,12 @@ fun HomeScreen(
                     },
                     actions = {
                         Icon(
-                            imageVector = Icons.Filled.Language,
-                            contentDescription = stringResource(id = R.string.change_language),
+                            imageVector = Icons.Filled.Settings,
+                            contentDescription = stringResource(id = R.string.settings),
                             modifier = Modifier
                                 .padding(all = 5.dp)
                                 .clickable(onClick = {
-                                    openChangeLanguageDialog.value = true
-                                })
-                        )
-                        Icon(
-                            imageVector = Icons.Filled.Share,
-                            contentDescription = stringResource(id = R.string.share),
-                            modifier = Modifier
-                                .padding(all = 5.dp)
-                                .clickable(onClick = {
-                                    try {
-                                        context.startActivity(openShare)
-                                    } catch (e: ActivityNotFoundException) {
-                                        // TODO Error Share
-                                    }
-                                })
-                        )
-                        Icon(
-                            imageVector = Icons.Filled.Star,
-                            contentDescription = stringResource(id = R.string.rate),
-                            modifier = Modifier
-                                .padding(all = 5.dp)
-                                .clickable(onClick = {
-                                    try {
-                                        context.startActivity(openRate1)
-                                    } catch (e: ActivityNotFoundException) {
-                                        context.startActivity(openRate2)
-                                    }
-                                })
-                        )
-                        Icon(
-                            imageVector = Icons.Filled.PrivacyTip,
-                            contentDescription = stringResource(id = R.string.privacy_policy),
-                            modifier = Modifier
-                                .padding(all = 5.dp)
-                                .clickable(onClick = {
-                                    try {
-                                        context.startActivity(openPrivacyPolicy)
-                                    } catch (e: ActivityNotFoundException) {
-                                        // TODO Error Privacy Policy
-                                    }
-
+                                    navController.navigate("settings")
                                 })
                         )
                     }
@@ -170,23 +94,11 @@ fun HomeScreen(
                     viewModel = viewModel
                 )
             }
-            if (openChangeLanguageDialog.value) {
-                ChangeLanguageDialog(
-                    openChangeLanguageDialog = openChangeLanguageDialog,
-                    resetLanguage = resetLanguage,
-                    languageViewModel = languageViewModel
-                )
-            }
             if (openAddUserDialog.value) {
                 AddUserDialog(
                     openAddUserDialog = openAddUserDialog,
                     viewModel = viewModel
                 )
-            }
-            if (resetLanguage.value) {
-                currentLanguage = languageViewModel.language.observeAsState().value
-                SetLanguage(position = currentLanguage!!)
-                resetLanguage.value = false
             }
         }
     }
@@ -216,8 +128,14 @@ fun HomeContent(
 }
 
 @Composable
-private fun SetLanguage(position: Int) {
-    val locale = Locale(if (position == 1) "gr" else "en")
+private fun SetLanguage(language: Int) {
+    val locale = Locale(
+        when(language) {
+            0 -> "en"
+            1 -> "el"
+            else -> "en"
+        }
+    )
     val configuration = LocalConfiguration.current
     configuration.setLocale(locale)
     val resources = LocalContext.current.resources
@@ -230,7 +148,7 @@ private fun SetLanguage(position: Int) {
     uiMode = UI_MODE_TYPE_NORMAL
 )
 @Composable
-fun HomeScreenPreview() {
+fun HomeContentPreview() {
     val navController = rememberNavController()
     val viewModel: AppViewModel = viewModel()
     val users = listOf(

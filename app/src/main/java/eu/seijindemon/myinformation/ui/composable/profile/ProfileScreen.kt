@@ -20,7 +20,10 @@ import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
 
 @Composable
-fun ProfileScreen(navController: NavController, viewModel: AppViewModel) {
+fun ProfileScreen(
+    navController: NavController,
+    viewModel: AppViewModel
+) {
 
     val user by  viewModel.user.observeAsState()
 

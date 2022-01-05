@@ -14,11 +14,16 @@ import javax.inject.Inject
 class DataStorePreferenceRepository @Inject constructor(
     @ApplicationContext context: Context
 ) {
-    private val dataStore: DataStore<Preferences> = context.createDataStore(name = "LanguageData")
+    private val languageDataStore: DataStore<Preferences> = context.createDataStore(name = "LanguageData")
     private val defaultLanguage = 0
+
+    private val themeDataStore: DataStore<Preferences> = context.createDataStore(name = "ThemeData")
+    private val defaultTheme = 0
 
     companion object {
         val PREF_LANGUAGE = preferencesKey<Int>("language")
+        val PREF_THEME = preferencesKey<Int>("theme")
+
         private var INSTANCE: DataStorePreferenceRepository? = null
 
         fun getInstance(context: Context): DataStorePreferenceRepository {
@@ -34,13 +39,24 @@ class DataStorePreferenceRepository @Inject constructor(
     }
 
     suspend fun setLanguage(language: Int) {
-        dataStore.edit { preferences ->
+        languageDataStore.edit { preferences ->
             preferences[PREF_LANGUAGE] = language
         }
     }
 
-    val getLanguage: Flow<Int> = dataStore.data
+    val getLanguage: Flow<Int> = languageDataStore.data
         .map {  preferences ->
             preferences[PREF_LANGUAGE] ?: defaultLanguage
+        }
+
+    suspend fun setTheme(theme: Int) {
+        themeDataStore.edit { preferences ->
+            preferences[PREF_THEME] = theme
+        }
+    }
+
+    val getTheme: Flow<Int> = themeDataStore.data
+        .map {  preferences ->
+            preferences[PREF_THEME] ?: defaultTheme
         }
 }
