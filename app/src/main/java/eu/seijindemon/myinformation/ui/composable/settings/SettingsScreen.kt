@@ -286,7 +286,9 @@ fun settingsRowModifier(
             try {
                 context.startActivity(intent)
             } catch (e: ActivityNotFoundException) {
-                // TODO Error
+                if (intent2 != null) {
+                    context.startActivity(intent2)
+                }
             }
         }
 }
