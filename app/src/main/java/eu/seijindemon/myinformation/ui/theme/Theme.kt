@@ -48,19 +48,13 @@ fun MyInformationTheme(
 ) {
     val colors = if (darkTheme) DarkColorPalette else LightColorPalette
 
-    val rippleCustomTheme = object : RippleTheme {
-        @Composable
-        override fun defaultColor() = RippleTheme.defaultRippleColor(Color.Black, lightTheme = true)
-
-        @Composable
-        override fun rippleAlpha(): RippleAlpha = RippleTheme.defaultRippleAlpha(Color.Black, lightTheme = true)
+    CompositionLocalProvider(LocalDimens provides Dimens()) {
+        MaterialTheme(
+            colors = colors,
+            typography = Typography,
+            shapes = Shapes,
+            content = content
+        )
     }
 
-
-    MaterialTheme(
-        colors = colors,
-        typography = Typography,
-        shapes = Shapes,
-        content = { CompositionLocalProvider(LocalRippleTheme provides rippleCustomTheme) { content() } }
-    )
 }
