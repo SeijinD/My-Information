@@ -8,43 +8,30 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 data class Dimens(
-    // Default Margin Values
-    val margin_octuple_128dp: Dp = 128.dp,
-    val margin_quadruple_64dp: Dp = 64.dp,
-    val margin_custom_48dp: Dp = 48.dp,
-    val margin_double_32dp: Dp = 32.dp,
-    val margin_double_half_24dp: Dp = 24.dp,
-    val margin_default_16dp: Dp = 16.dp,
-    val margin_half_double_12dp: Dp = 12.dp,
-    val margin_half_8dp: Dp = 8.dp,
-    val margin_quarter_4dp: Dp = 4.dp,
-    val margin_eighth_2dp: Dp = 2.dp,
-    // Default Text Sizes
-    val text_tiny_4sp: Dp = 4.dp,
-    val text_micro_8sp: Dp = 8.dp,
-    val text_mini_10sp: Dp = 10.dp,
-    val text_small_12sp: Dp = 12.dp,
-    val text_default_14sp: Dp = 14.dp,
-    val text_normal_16sp: Dp = 16.dp,
-    val text_medium_18sp: Dp = 18.dp,
-    val text_large_22sp: Dp = 22.dp,
-    val text_xlarge_26sp: Dp = 26.dp,
-    val text_xxlarge_32sp: Dp = 32.dp,
-    // Corners
-    val radius_quadruple_40dp: Dp = 40.dp,
-    val radius_double_20dp: Dp = 20.dp,
-    val radius_default_10dp: Dp = 10.dp,
-    val radius_half_5dp: Dp = 5.dp,
-    val radius_custom_button_8dp: Dp = 8.dp,
-    val radius_custom_button_2dp: Dp = 2.dp,
-    // Vector Sizes
-    val vector_small: Dp = 24.dp,
-    val vector_medium: Dp = 32.dp,
-    val vector_normal: Dp = 48.dp,
-    val vector_large: Dp = 64.dp,
-    // Elevation
-    val elevation_4dp: Dp = 4.dp,
-    val elevation_default_10dp: Dp = 10.dp,
+    val SpacingOctuple_128dp: Dp = 128.dp,
+    val SpacingSeptuple_112dp: Dp = 112.dp,
+    val SpacingSextuple_96dp: Dp = 96.dp,
+    val SpacingQuintuple_80dp: Dp = 80.dp,
+    val SpacingQuadruple_64dp: Dp = 64.dp,
+    val SpacingTriple_48dp: Dp = 48.dp,
+    val SpacingDouble_32dp: Dp = 32.dp,
+    val SpacingDefault_16dp: Dp = 16.dp,
+    val SpacingHalf_8dp: Dp = 8.dp,
+    val SpacingQuarter_4dp: Dp = 4.dp,
+    val SpacingEighth_2dp: Dp = 2.dp,
+
+    val SpacingCustom_6dp: Dp = 6.dp,
+    val SpacingCustom_12dp: Dp = 12.dp,
+    val SpacingCustom_24dp: Dp = 24.dp,
+
+    val SpacingDivider_1dp: Dp = 1.dp,
+    val SpacingDivider_2dp: Dp = 2.dp,
+    val SpacingDivider_4dp: Dp = 4.dp,
+
+    val ElevationCustom_2dp: Dp = 2.dp,
+    val ElevationCustom_4dp: Dp = 4.dp,
+    val ElevationCustom_8dp: Dp = 8.dp,
+
 )
 
 val LocalDimens = compositionLocalOf { Dimens() }

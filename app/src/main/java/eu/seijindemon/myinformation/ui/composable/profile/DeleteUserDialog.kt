@@ -7,10 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -57,7 +54,8 @@ fun DeleteUserDialog(
                 text = stringResource(id = R.string.delete_user),
                 maxFontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                color = MaterialTheme.colors.onBackground
             )
             Divider()
             DeleteUser(
@@ -89,7 +87,11 @@ fun DeleteUser(
                 viewModel.deleteUser(user)
                 openDeleteUserDialog.value = false
                 navController.navigate("home")
-            }
+            },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary
+            )
         ) {
             Text(
                 text = stringResource(id = R.string.delete_user)

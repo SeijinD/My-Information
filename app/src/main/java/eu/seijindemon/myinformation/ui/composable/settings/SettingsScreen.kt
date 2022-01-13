@@ -41,12 +41,12 @@ fun SettingsScreen(
     navController: NavController,
     languageViewModel: LanguageViewModel
 ) {
-    MyInformationTheme(
-        darkTheme = false
-    ) {
+    MyInformationTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
+                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                    contentColor = MaterialTheme.colors.onPrimary,
                     title = {
                         Text(text = stringResource(id = R.string.app_name))
                     },
@@ -54,7 +54,7 @@ fun SettingsScreen(
                         IconButton(onClick = { navController.navigate("home") }) {
                             Icon(
                                 imageVector = Icons.Filled.ArrowBack,
-                                contentDescription = stringResource(id = R.string.back)
+                                contentDescription = stringResource(id = R.string.back),
                             )
                         }
                     }
@@ -62,6 +62,8 @@ fun SettingsScreen(
             },
             bottomBar = {
                 BottomAppBar(
+                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                    contentColor = MaterialTheme.colors.onPrimary,
                     cutoutShape = CircleShape
                 ) {
 
@@ -69,12 +71,13 @@ fun SettingsScreen(
             },
             floatingActionButton = {
                 FloatingActionButton(
+                    backgroundColor = MaterialTheme.colors.primary,
+                    contentColor = MaterialTheme.colors.onPrimary,
                     onClick = {
 
                     }
                 ) {
                     Icon(
-                        tint = MaterialTheme.colors.primary,
                         imageVector = Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.add_field)
                     )
@@ -153,7 +156,8 @@ fun SettingsContent(
                 text = stringResource(id = R.string.share),
                 maxFontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                color = MaterialTheme.colors.onBackground
             )
         }
         Row(
@@ -166,14 +170,15 @@ fun SettingsContent(
         ) {
             Icon(
                 imageVector = Icons.Filled.Star,
-                contentDescription = stringResource(id = R.string.rate)
+                contentDescription = stringResource(id = R.string.rate),
             )
             AutoSizeText(
                 modifier = Modifier.padding(start = 10.dp),
                 text = stringResource(id = R.string.rate),
                 maxFontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                color = MaterialTheme.colors.onBackground
             )
         }
         Row(
@@ -192,7 +197,8 @@ fun SettingsContent(
                 text = stringResource(id = R.string.privacy_policy),
                 maxFontSize = 20.sp,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                color = MaterialTheme.colors.onBackground
             )
         }
     }
@@ -232,6 +238,7 @@ fun DropDownMenuLanguage(
         label = {Text("Language")},
         trailingIcon = {
             Icon(
+                tint = MaterialTheme.colors.secondary,
                 imageVector = icon,
                 contentDescription = "contentDescription",
                 modifier = Modifier
@@ -239,13 +246,15 @@ fun DropDownMenuLanguage(
                         expanded.value= !expanded.value
                     }
             )
-        }
+        },
+        colors = TextFieldDefaults.outlinedTextFieldColors(
+
+        )
     )
     DropdownMenu(
         expanded = expanded.value,
         onDismissRequest = { expanded.value = false },
-        modifier = Modifier
-            .width(with(LocalDensity.current){textFieldSize.value.width.toDp()})
+        modifier = Modifier.width(with(LocalDensity.current){textFieldSize.value.width.toDp()})
     ) {
         languages.forEachIndexed { index, s ->
             DropdownMenuItem(

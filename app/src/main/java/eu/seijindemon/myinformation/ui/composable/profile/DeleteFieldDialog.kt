@@ -55,7 +55,8 @@ fun DeleteFieldDialog(
                 text = stringResource(id = R.string.delete_field),
                 maxFontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                color = MaterialTheme.colors.onBackground
             )
             Divider()
             DeleteField(
@@ -91,7 +92,6 @@ fun DeleteField(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Divider()
         Button(
             onClick = {
                 for (item: KeyValue in list) {
@@ -103,7 +103,11 @@ fun DeleteField(
                         navController.navigate("profile")
                     }
                 }
-            }
+            },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary
+            )
         ) {
             Text(
                 text = stringResource(id = R.string.delete_field)

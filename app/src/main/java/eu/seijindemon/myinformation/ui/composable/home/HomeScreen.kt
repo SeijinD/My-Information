@@ -40,12 +40,12 @@ fun HomeScreen(
     // Add User
     val openAddUserDialog = remember { mutableStateOf(false) }
 
-    MyInformationTheme(
-        darkTheme = false
-    ) {
+    MyInformationTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
+                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                    contentColor = MaterialTheme.colors.onPrimary,
                     title = {
                         Text(text = stringResource(id = R.string.app_name))
                     },
@@ -64,6 +64,8 @@ fun HomeScreen(
             },
             bottomBar = {
                 BottomAppBar(
+                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                    contentColor = MaterialTheme.colors.onPrimary,
                     cutoutShape = CircleShape
                 ) {
 
@@ -71,12 +73,13 @@ fun HomeScreen(
             },
             floatingActionButton = {
                 FloatingActionButton(
+                    backgroundColor = MaterialTheme.colors.primary,
+                    contentColor = MaterialTheme.colors.onPrimary,
                     onClick = {
                         openAddUserDialog.value = true
                     }
                 ) {
                     Icon(
-                        tint = MaterialTheme.colors.primary,
                         imageVector = Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.add_user)
                     )

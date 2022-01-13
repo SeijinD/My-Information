@@ -4,6 +4,9 @@ import android.content.res.Configuration.UI_MODE_TYPE_NORMAL
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.ButtonColors
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,7 +53,8 @@ fun UserCard(
                 text = "${user.firstName} ${user.lastName}",
                 maxFontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                color = MaterialTheme.colors.onBackground
             )
         }
         Button(
@@ -59,6 +63,10 @@ fun UserCard(
                 .fillMaxWidth()
                 .padding(all = 5.dp)
                 .clip(RoundedCornerShape(8.dp)),
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary
+            ),
             onClick = {
                 viewModel.getUserById(user.id)
                 navController.navigate("profile")

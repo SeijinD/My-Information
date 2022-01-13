@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -49,7 +50,8 @@ fun ProfileCard(
             text = "${user.firstName} ${user.lastName}",
             maxFontSize = 20.sp,
             fontWeight = FontWeight.Bold,
-            maxLines = 1
+            maxLines = 1,
+            color = MaterialTheme.colors.onBackground
         )
         Divider(
             thickness = 5.dp
@@ -77,7 +79,7 @@ fun ProfileCard(
                             ),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        val color = if (selectedField.value && item.key == selectedFieldKey.value) { Color.Red } else { Color.Unspecified }
+                        val color = if (selectedField.value && item.key == selectedFieldKey.value) { Color.Red } else { MaterialTheme.colors.onBackground }
                         AutoSizeText(
                             modifier = Modifier
                                 .padding(end = 5.dp)

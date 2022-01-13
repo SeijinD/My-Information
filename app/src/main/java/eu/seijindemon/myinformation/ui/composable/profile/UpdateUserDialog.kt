@@ -55,7 +55,8 @@ fun UpdateUserDialog(
                 text = stringResource(id = R.string.update_user),
                 maxFontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                color = MaterialTheme.colors.onBackground
             )
             Divider()
             UpdateUser(
@@ -91,11 +92,17 @@ fun UpdateUser(
     ) {
         OutlinedTextField(
             value = firstName,
-            onValueChange = { firstName = it }
+            onValueChange = { firstName = it },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+
+            )
         )
         OutlinedTextField(
             value = lastName,
-            onValueChange = { lastName = it }
+            onValueChange = { lastName = it },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+
+            )
         )
         Divider()
         Button(
@@ -125,7 +132,11 @@ fun UpdateUser(
                         navController.navigate("home")
                     }
                 }
-            }
+            },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary
+            )
         ) {
             Text(
                 text = stringResource(id = R.string.update_user)

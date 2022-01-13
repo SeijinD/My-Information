@@ -46,12 +46,12 @@ fun ProfileScreen(
     val selectedFieldKey = remember { mutableStateOf("") }
     val selectedFieldValue = remember { mutableStateOf("") }
 
-    MyInformationTheme(
-        darkTheme = false
-    ) {
+    MyInformationTheme {
         Scaffold(
             topBar = {
                 TopAppBar(
+                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                    contentColor = MaterialTheme.colors.onPrimary,
                     title = {
                         Text(text = stringResource(id = R.string.app_name))
                     },
@@ -67,6 +67,8 @@ fun ProfileScreen(
             },
             bottomBar = {
                 BottomAppBar(
+                    backgroundColor = MaterialTheme.colors.primaryVariant,
+                    contentColor = MaterialTheme.colors.onPrimary,
                     cutoutShape = CircleShape
                 ) {
                     IconButton(
@@ -120,12 +122,13 @@ fun ProfileScreen(
             },
             floatingActionButton = {
                 FloatingActionButton(
+                    backgroundColor = MaterialTheme.colors.primary,
+                    contentColor = MaterialTheme.colors.onPrimary,
                     onClick = {
                         openAddFieldDialog.value = true
                     }
                 ) {
                     Icon(
-                        tint = MaterialTheme.colors.primary,
                         imageVector = Icons.Filled.Add,
                         contentDescription = stringResource(id = R.string.add_field)
                     )

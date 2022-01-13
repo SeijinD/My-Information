@@ -50,7 +50,8 @@ fun AddUserDialog(
                 text = stringResource(id = R.string.add_user),
                 maxFontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                color = MaterialTheme.colors.primary
             )
             Divider()
             AddUser(
@@ -82,14 +83,24 @@ fun AddUser(
     ) {
         OutlinedTextField(
             value = firstName,
-            onValueChange = { firstName = it }
+            onValueChange = { firstName = it },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+
+            )
         )
         OutlinedTextField(
             value = lastName,
-            onValueChange = { lastName = it }
+            onValueChange = { lastName = it },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+
+            )
         )
         Divider()
         Button(
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary
+            ),
             onClick = {
                 when {
                     firstName.isEmpty() -> {

@@ -54,7 +54,8 @@ fun AddFieldDialog(
                 text = stringResource(id = R.string.add_field),
                 maxFontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                color = MaterialTheme.colors.onBackground
             )
             Divider()
             AddField(
@@ -89,11 +90,17 @@ fun AddField(
     ) {
         OutlinedTextField(
             value = key,
-            onValueChange = { key = it }
+            onValueChange = { key = it },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+
+            )
         )
         OutlinedTextField(
             value = value,
-            onValueChange = { value = it }
+            onValueChange = { value = it },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+
+            )
         )
         Divider()
         Button(
@@ -126,7 +133,11 @@ fun AddField(
                         navController.navigate("profile")
                     }
                 }
-            }
+            },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary
+            )
         ) {
             Text(
                 text = stringResource(id = R.string.add_field)

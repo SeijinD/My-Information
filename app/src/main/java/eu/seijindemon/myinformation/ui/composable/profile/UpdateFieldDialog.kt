@@ -56,7 +56,8 @@ fun UpdateFieldDialog(
                 text = stringResource(id = R.string.update_field),
                 maxFontSize = 18.sp,
                 fontWeight = FontWeight.Bold,
-                maxLines = 1
+                maxLines = 1,
+                color = MaterialTheme.colors.onBackground
             )
             Divider()
             UpdateField(
@@ -101,11 +102,17 @@ fun UpdateField(
         OutlinedTextField(
             value = key,
             onValueChange = { key = it },
-            enabled = false
+            enabled = false,
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+
+            )
         )
         OutlinedTextField(
             value = value,
-            onValueChange = { value = it }
+            onValueChange = { value = it },
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+
+            )
         )
         Divider()
         Button(
@@ -133,7 +140,11 @@ fun UpdateField(
                         }
                     }
                 }
-            }
+            },
+            colors = ButtonDefaults.buttonColors(
+                backgroundColor = MaterialTheme.colors.primary,
+                contentColor = MaterialTheme.colors.onPrimary
+            )
         ) {
             Text(
                 text = stringResource(id = R.string.update_field)

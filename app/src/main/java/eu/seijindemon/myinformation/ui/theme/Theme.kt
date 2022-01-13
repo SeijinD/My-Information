@@ -5,40 +5,40 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
-import androidx.compose.material.ripple.LocalRippleTheme
-import androidx.compose.material.ripple.RippleAlpha
-import androidx.compose.material.ripple.RippleTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.graphics.Color
 
 @SuppressLint("ConflictingOnColor")
 private val LightColorPalette = lightColors(
-    primary = Blue600,
-    primaryVariant = Blue400,
-    onPrimary = Black2,
-    secondary = Color.White,
-    secondaryVariant = Teal300,
-    onSecondary = Color.Black,
-    error = RedErrorDark,
-    onError = RedErrorLight,
-    background = Grey1,
-    onBackground = Color.Black,
+    primary = Color(0xFF42A5F5),
+    primaryVariant  = Color(0xFF1976D2),
+    secondary = Color(0xFF03DAC6),
+    secondaryVariant = Color(0xFF018786),
+    background = Color.White,
     surface = Color.White,
-    onSurface = Black2,
+    error = Color(0xFFB60021),
+    onPrimary = Color.White,
+    onSecondary = Color.Black,
+    onBackground = Color(0xFF1976D2),
+    onSurface = Color.Black,
+    onError = Color.White
 )
 
+@SuppressLint("ConflictingOnColor")
 private val DarkColorPalette = darkColors(
-    primary = Blue700,
-    primaryVariant = Color.White,
-    onPrimary = Color.White,
-    secondary = Black1,
-    onSecondary = Color.White,
-    error = RedErrorLight,
-    background = Color.Black,
-    onBackground = Color.White,
-    surface = Black1,
+    primary = Color(0xFF42A5F5),
+    primaryVariant = Color(0xFF1976D2),
+    secondary = Color(0xFF03DAC6),
+    secondaryVariant = Color(0xFF018786),
+    background = Color(0xFF534F4F),
+    surface = Color(0xFF534F4F),
+    error = Color(0xFFB60021),
+    onPrimary = Color.Black,
+    onSecondary = Color.Black,
+    onBackground = Color(0xFF42A5F5),
     onSurface = Color.White,
+    onError = Color.Black
 )
 
 @Composable
