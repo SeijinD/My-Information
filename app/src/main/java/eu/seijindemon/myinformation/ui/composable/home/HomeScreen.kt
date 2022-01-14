@@ -20,21 +20,14 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import eu.seijindemon.myinformation.R
 import eu.seijindemon.myinformation.data.model.User
-import eu.seijindemon.myinformation.ui.composable.general.SetLanguage
 import eu.seijindemon.myinformation.ui.theme.MyInformationTheme
 import eu.seijindemon.myinformation.ui.viewmodel.AppViewModel
-import eu.seijindemon.myinformation.ui.viewmodel.LanguageViewModel
 
 @Composable
 fun HomeScreen(
     navController: NavController,
-    viewModel: AppViewModel,
-    languageViewModel: LanguageViewModel
+    viewModel: AppViewModel
 ) {
-    // Language
-    val currentLanguage = languageViewModel.language.observeAsState().value
-    SetLanguage(language = currentLanguage!!)
-
     val users by viewModel.users.observeAsState()
 
     // Add User
